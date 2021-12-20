@@ -52,6 +52,12 @@ public class UserController {
         return new ResponseEntity<>(userService.login(tokenRequestDto), HttpStatus.OK);
     }
 
+    @ApiOperation(value="Edit profile data")
+    @PostMapping("/update")
+    public ResponseEntity<UserDto> updateUser(@RequestHeader("Authorization") String authorization, @RequestBody UserDto userDto){
+        return new ResponseEntity<>(userService.updateUser(userDto,authorization),HttpStatus.OK);
+    }
+
     @ApiOperation(value="Block user")
     @PostMapping("/block")
     @CheckSecurity(roles = {"ROLE_ADMIN"})

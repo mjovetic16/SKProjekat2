@@ -13,6 +13,8 @@ public interface UserService {
 
     UserDto addManager(ManagerCreateDto managerCreateDto);
 
+    UserDto updateUser(UserDto userDto, String auth);
+
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
 
     BlockedDto block(UserDto userDto);

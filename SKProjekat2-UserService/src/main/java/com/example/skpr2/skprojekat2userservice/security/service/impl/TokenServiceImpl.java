@@ -31,8 +31,10 @@ public class TokenServiceImpl implements TokenService {
                     .parseClaimsJws(jwt)
                     .getBody();
         } catch (Exception e) {
+            System.out.println("Couldn't parse token: "+jwt);
             return null;
         }
+        System.out.println(claims);
         return claims;
     }
 }

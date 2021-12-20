@@ -58,13 +58,14 @@ public class UserServiceImpl implements UserService {
         return userMapper.userToUserDto(user);
     }
 
+
     @Override
     public TokenResponseDto login(TokenRequestDto tokenRequestDto) {
         //Try to find active user for specified credentials
         User user = userRepository
-                .findUserByUsernameAndPassword(tokenRequestDto.getUsername(), tokenRequestDto.getPassword())
+                .findUserByEmailAndPassword(tokenRequestDto.getEmail(), tokenRequestDto.getPassword())
                 .orElseThrow(() -> new NotFoundException(String
-                        .format("User with username: %s and password: %s not found.", tokenRequestDto.getUsername(),
+                        .format("User with email: %s and password: %s not found.", tokenRequestDto.getEmail(),
                                 tokenRequestDto.getPassword())));
 
         if(isBlocked(userMapper.userToUserDto(user)))
@@ -84,6 +85,28 @@ public class UserServiceImpl implements UserService {
     public boolean isBlocked(UserDto userDto) {
 
         return blockedRepository.findByBlockedUsersContains(userMapper.userDtoToUser(userDto)).isPresent();
+
+    }
+
+    @Override
+    public UserDto updateUser(UserDto userDto, String auth) {
+        auth = auth.replace("Bearer ", "");
+        Claims claims = tokenService.parseToken(auth);
+
+        User user = userRepository.findUserById(userDto.getId())
+                .orElseThrow(()->new NotFoundException(String.format("User doesn't exist")));
+
+
+        if(user.getId().equals(Long.valueOf(claims.get("id",Integer.class)))){
+
+            if(userDto.getRole().equals(user.getRole().getName().name())){
+                return userMapper.userToUserDto(userRepository.save(userMapper.userDtoToUser(userDto)));
+            }else{
+                throw new BlockedException(String.format("User can't change his role"));
+            }
+        }else{
+            throw new BlockedException(String.format("This user can only change his own data"));
+        }
 
     }
 
