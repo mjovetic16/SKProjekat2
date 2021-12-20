@@ -54,6 +54,7 @@ public class UserController {
 
     @ApiOperation(value="Edit profile data")
     @PostMapping("/update")
+    @CheckSecurity(roles = {"ROLE_CLIENT","ROLE_MANAGER"})
     public ResponseEntity<UserDto> updateUser(@RequestHeader("Authorization") String authorization, @RequestBody UserDto userDto){
         return new ResponseEntity<>(userService.updateUser(userDto,authorization),HttpStatus.OK);
     }
