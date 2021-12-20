@@ -1,14 +1,18 @@
 package com.example.skpr2.skprojekat2userservice.mapper;
 
 
+import com.example.skpr2.skprojekat2userservice.domain.Blocked;
 import com.example.skpr2.skprojekat2userservice.domain.Role;
 import com.example.skpr2.skprojekat2userservice.domain.RoleType;
 import com.example.skpr2.skprojekat2userservice.domain.User;
+import com.example.skpr2.skprojekat2userservice.dto.BlockedDto;
 import com.example.skpr2.skprojekat2userservice.dto.ManagerCreateDto;
 import com.example.skpr2.skprojekat2userservice.dto.UserCreateDto;
 import com.example.skpr2.skprojekat2userservice.dto.UserDto;
 import com.example.skpr2.skprojekat2userservice.repository.RoleRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 
 @Component
 public class UserMapper {
@@ -90,5 +94,17 @@ public class UserMapper {
         user.setHotel(managerCreateDto.getHotel());
 
         return user;
+    }
+
+    public BlockedDto blockedToBlockedDto(Blocked blocked){
+        BlockedDto bdto = new BlockedDto();
+        bdto.setId(blocked.getId());
+
+        ArrayList<UserDto> userDtos = new ArrayList();
+        blocked.getBlockedUsers().forEach( (user) -> userDtos.add(this.userToUserDto(user)) );
+        bdto.setBlockedUsers(userDtos);
+
+        return bdto;
+
     }
 }

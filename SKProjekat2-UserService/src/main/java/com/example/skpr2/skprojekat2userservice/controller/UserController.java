@@ -1,6 +1,7 @@
 package com.example.skpr2.skprojekat2userservice.controller;
 
 
+import com.example.skpr2.skprojekat2userservice.domain.Blocked;
 import com.example.skpr2.skprojekat2userservice.dto.*;
 import com.example.skpr2.skprojekat2userservice.security.CheckSecurity;
 import com.example.skpr2.skprojekat2userservice.service.UserService;
@@ -50,4 +51,26 @@ public class UserController {
     public ResponseEntity<TokenResponseDto> loginUser(@RequestBody @Valid TokenRequestDto tokenRequestDto) {
         return new ResponseEntity<>(userService.login(tokenRequestDto), HttpStatus.OK);
     }
+
+    @ApiOperation(value="Block user")
+    @PostMapping("/block")
+    @CheckSecurity(roles = {"ROLE_ADMIN"})
+    public ResponseEntity<BlockedDto> blockUser(@RequestHeader("Authorization") String authorization, @RequestBody UserDto userDto){
+        return new ResponseEntity<>(userService.block(userDto),HttpStatus.OK);
+    }
+
+    @ApiOperation(value="Unblock user")
+    @PostMapping("/block/unblock")
+    @CheckSecurity(roles = {"ROLE_ADMIN"})
+    public ResponseEntity<BlockedDto> unblockUser(@RequestHeader("Authorization") String authorization, @RequestBody UserDto userDto){
+        return new ResponseEntity<>(userService.unblock(userDto),HttpStatus.OK);
+    }
+
+    @ApiOperation(value="List of all blocked users")
+    @GetMapping("/block/all")
+    @CheckSecurity(roles = {"ROLE_ADMIN"})
+    public ResponseEntity<BlockedDto> getBlocked(@RequestHeader("Authorization") String authorization){
+        return new ResponseEntity<>(userService.getBlocked(),HttpStatus.OK);
+    }
+
 }

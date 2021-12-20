@@ -1,10 +1,12 @@
 package com.example.skpr2.skprojekat2userservice.service.impl;
 
 
+import com.example.skpr2.skprojekat2userservice.domain.Blocked;
 import com.example.skpr2.skprojekat2userservice.domain.User;
 import com.example.skpr2.skprojekat2userservice.dto.*;
 import com.example.skpr2.skprojekat2userservice.exception.NotFoundException;
 import com.example.skpr2.skprojekat2userservice.mapper.UserMapper;
+import com.example.skpr2.skprojekat2userservice.repository.BlockedRepository;
 import com.example.skpr2.skprojekat2userservice.repository.UserRepository;
 import com.example.skpr2.skprojekat2userservice.security.service.TokenService;
 import com.example.skpr2.skprojekat2userservice.service.UserService;
@@ -15,6 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -22,11 +27,13 @@ public class UserServiceImpl implements UserService {
     private TokenService tokenService;
     private UserRepository userRepository;
     private UserMapper userMapper;
+    private BlockedRepository blockedRepository;
 
-    public UserServiceImpl(UserRepository userRepository, TokenService tokenService, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, TokenService tokenService, UserMapper userMapper, BlockedRepository blockedRepository) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
         this.userMapper = userMapper;
+        this.blockedRepository = blockedRepository;
     }
 
     @Override
@@ -58,12 +65,61 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundException(String
                         .format("User with username: %s and password: %s not found.", tokenRequestDto.getUsername(),
                                 tokenRequestDto.getPassword())));
+
+        if(isBlocked(userMapper.userToUserDto(user)))
+            //TODO Blocked Exception
+            throw  new NotFoundException(String
+                    .format("The user is blocked"));
+
+
         //Create token payload
         Claims claims = Jwts.claims();
         claims.put("id", user.getId());
         claims.put("role", user.getRole().getName());
         //Generate token
         return new TokenResponseDto(tokenService.generate(claims));
+    }
+
+    @Override
+    public boolean isBlocked(UserDto userDto) {
+
+        return blockedRepository.findByBlockedUsersContains(userMapper.userDtoToUser(userDto)).isPresent();
+
+    }
+
+    @Override
+    public BlockedDto block(UserDto userDto) {
+
+        Blocked blocked = blockedRepository.findById(1).get();
+
+        List<User> blockedUsers;
+        blockedUsers = blocked.getBlockedUsers();
+        blockedUsers.add(userMapper.userDtoToUser(userDto));
+        blocked.setBlockedUsers(blockedUsers);
+
+        return userMapper.blockedToBlockedDto(blockedRepository.save(blocked));
+
+    }
+
+    @Override
+    public BlockedDto unblock(UserDto userDto) {
+
+        Blocked blocked = blockedRepository.findById(1).get();
+
+        List<User> blockedUsers;
+        blockedUsers = blocked.getBlockedUsers();
+        blockedUsers.remove(userMapper.userDtoToUser(userDto));
+        blocked.setBlockedUsers(blockedUsers);
+
+        return userMapper.blockedToBlockedDto(blockedRepository.save(blocked));
+
+    }
+
+    @Override
+    public BlockedDto getBlocked(){
+        Blocked blocked = blockedRepository.findById(1).get();
+
+        return userMapper.blockedToBlockedDto(blocked);
     }
 
     //

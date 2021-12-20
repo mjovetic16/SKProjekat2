@@ -14,4 +14,12 @@ public interface UserService {
     UserDto addManager(ManagerCreateDto managerCreateDto);
 
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
+
+    BlockedDto block(UserDto userDto);
+
+    BlockedDto unblock(UserDto userDto);
+
+    boolean isBlocked(UserDto userDto);
+
+    BlockedDto getBlocked();
 }
