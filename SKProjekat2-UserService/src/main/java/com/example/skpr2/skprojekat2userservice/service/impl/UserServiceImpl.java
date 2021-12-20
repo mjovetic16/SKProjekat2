@@ -4,6 +4,7 @@ package com.example.skpr2.skprojekat2userservice.service.impl;
 import com.example.skpr2.skprojekat2userservice.domain.Blocked;
 import com.example.skpr2.skprojekat2userservice.domain.User;
 import com.example.skpr2.skprojekat2userservice.dto.*;
+import com.example.skpr2.skprojekat2userservice.exception.BlockedException;
 import com.example.skpr2.skprojekat2userservice.exception.NotFoundException;
 import com.example.skpr2.skprojekat2userservice.mapper.UserMapper;
 import com.example.skpr2.skprojekat2userservice.repository.BlockedRepository;
@@ -67,9 +68,8 @@ public class UserServiceImpl implements UserService {
                                 tokenRequestDto.getPassword())));
 
         if(isBlocked(userMapper.userToUserDto(user)))
-            //TODO Blocked Exception
-            throw  new NotFoundException(String
-                    .format("The user is blocked"));
+            throw  new BlockedException(String
+                    .format("The user is blocked from accessing the application"));
 
 
         //Create token payload
