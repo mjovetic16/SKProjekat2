@@ -1,11 +1,9 @@
 package com.example.skpr2.skprojekat2mainservice.domain;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-public class Hotel {
-
+public class RoomType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,16 +11,12 @@ public class Hotel {
 
     private String name;
 
-    private String desc;
+    private int price;
 
     private int numberOfRooms;
 
-    @OneToMany
-    private List<Room> rooms;
-
-    @OneToMany
-    private List<RoomType> roomTypes;
-
+    @ManyToOne
+    private Hotel hotel;
 
     public Long getId() {
         return id;
@@ -40,12 +34,12 @@ public class Hotel {
         this.name = name;
     }
 
-    public String getDesc() {
-        return desc;
+    public int getPrice() {
+        return price;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public int getNumberOfRooms() {
@@ -56,19 +50,11 @@ public class Hotel {
         this.numberOfRooms = numberOfRooms;
     }
 
-    public List<Room> getRooms() {
-        return rooms;
+    public Hotel getHotel() {
+        return hotel;
     }
 
-    public void setRooms(List<Room> rooms) {
-        this.rooms = rooms;
-    }
-
-    public List<RoomType> getRoomTypes() {
-        return roomTypes;
-    }
-
-    public void setRoomTypes(List<RoomType> roomTypes) {
-        this.roomTypes = roomTypes;
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
     }
 }
