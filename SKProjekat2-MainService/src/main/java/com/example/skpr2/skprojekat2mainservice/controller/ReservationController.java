@@ -1,11 +1,9 @@
 package com.example.skpr2.skprojekat2mainservice.controller;
 
 
-import com.example.skpr2.skprojekat2mainservice.dto.AllocationDto;
-import com.example.skpr2.skprojekat2mainservice.dto.AllocationDtoRequest;
-import com.example.skpr2.skprojekat2mainservice.dto.HotelDto;
-import com.example.skpr2.skprojekat2mainservice.dto.ReservationDto;
+import com.example.skpr2.skprojekat2mainservice.dto.*;
 import com.example.skpr2.skprojekat2mainservice.security.CheckSecurity;
+import com.example.skpr2.skprojekat2mainservice.service.HotelService;
 import com.example.skpr2.skprojekat2mainservice.service.ReservationService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
@@ -19,9 +17,11 @@ import org.springframework.web.bind.annotation.*;
 public class ReservationController {
 
     private ReservationService reservationService;
+    private HotelService hotelService;
 
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(ReservationService reservationService, HotelService hotelService) {
         this.reservationService = reservationService;
+        this.hotelService = hotelService;
     }
 
     @ApiOperation(value = "Get all reservations")
@@ -38,7 +38,7 @@ public class ReservationController {
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
     public ResponseEntity<Page<HotelDto>> getAllHotels(@RequestHeader("Authorization") String authorization, Pageable pageable) {
 
-        return new ResponseEntity<>(reservationService.findAllHotels(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(hotelService.findAllHotels(pageable), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Update hotel")
@@ -46,7 +46,7 @@ public class ReservationController {
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
     public ResponseEntity<HotelDto> updateHotel(@RequestHeader("Authorization") String authorization, @RequestBody HotelDto hotelDto) {
 
-        return new ResponseEntity<>(reservationService.updateHotel(hotelDto), HttpStatus.OK);
+        return new ResponseEntity<>(hotelService.updateHotel(hotelDto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Change room allocation")
@@ -54,9 +54,16 @@ public class ReservationController {
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
     public ResponseEntity<HotelDto> changeAllocation(@RequestHeader("Authorization") String authorization, @RequestBody AllocationDtoRequest allocationDtoRequest) {
 
-        return new ResponseEntity<>(reservationService.changeRoomAllocation(allocationDtoRequest), HttpStatus.OK);
+        return new ResponseEntity<>(hotelService.changeRoomAllocation(allocationDtoRequest), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Get all termini")
+    @GetMapping("/termin")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
+    public ResponseEntity<Page<TerminDto>> getAllTermins(@RequestHeader("Authorization") String authorization, Pageable pageable) {
+
+        return new ResponseEntity<>(reservationService.findAllTs(pageable), HttpStatus.OK);
+    }
 
 
 }

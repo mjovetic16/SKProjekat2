@@ -10,10 +10,7 @@ import com.example.skpr2.skprojekat2mainservice.exception.NotFoundException;
 import com.example.skpr2.skprojekat2mainservice.mapper.HotelMapper;
 import com.example.skpr2.skprojekat2mainservice.mapper.ReservationMapper;
 import com.example.skpr2.skprojekat2mainservice.mapper.RoomMapper;
-import com.example.skpr2.skprojekat2mainservice.repository.HotelRepository;
-import com.example.skpr2.skprojekat2mainservice.repository.ReservationRepository;
-import com.example.skpr2.skprojekat2mainservice.repository.RoomRepository;
-import com.example.skpr2.skprojekat2mainservice.repository.RoomTypeRepository;
+import com.example.skpr2.skprojekat2mainservice.repository.*;
 import com.example.skpr2.skprojekat2mainservice.service.ReservationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,27 +25,20 @@ import java.util.List;
 public class ReservationServiceImpl implements ReservationService {
 
     private ReservationRepository reservationRepository;
-    private RoomRepository roomRepository;
-    private RoomTypeRepository roomTypeRepository;
-    private HotelRepository hotelRepository;
+
+    private TerminRepository terminRepository;
+
     private ReservationMapper reservationMapper;
-    private HotelMapper hotelMapper;
-    private RoomMapper roomMapper;
 
 
 
-    public ReservationServiceImpl(ReservationMapper reservationMapper, ReservationRepository reservationRepository,
-                                  HotelRepository hotelRepository, RoomRepository roomRepository, RoomTypeRepository roomTypeRepository,
-                                  HotelMapper hotelMapper, RoomMapper roomMapper) {
+    public ReservationServiceImpl(ReservationMapper reservationMapper, ReservationRepository reservationRepository, TerminRepository terminRepository) {
 
         this.reservationMapper = reservationMapper;
-        this.roomMapper = roomMapper;
-        this.hotelMapper = hotelMapper;
-        this.hotelRepository = hotelRepository;
-        this.reservationRepository = reservationRepository;
-        this.roomRepository = roomRepository;
-        this.roomTypeRepository = roomTypeRepository;
 
+        this.reservationRepository = reservationRepository;
+
+        this.terminRepository = terminRepository;
 
     }
 
@@ -59,62 +49,11 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Page<HotelDto> findAllHotels(Pageable pageable) {
-        return hotelRepository.findAll(pageable)
-                .map(hotelMapper::hotelToHotelDto);
-    }
+    public Page<TerminDto> findAllTs(Pageable pageable) {
 
-    @Override
-    public HotelDto updateHotel(HotelDto hotelDto) {
-        hotelRepository.findById(hotelDto.getId()).orElseThrow(()->new NotFoundException("Hotel ne postoji"));
-        Hotel hotel = hotelMapper.hotelDtoToHotel(hotelDto);
+        return terminRepository.findAll(pageable)
+                .map(reservationMapper::terminToTerminDto);
 
-        return hotelMapper.hotelToHotelDto(hotelRepository.save(hotel));
-    }
-
-    @Override
-    public HotelDto changeRoomAllocation(AllocationDtoRequest allocationDtoRequest) {
-
-        HotelDto hotelDto = new HotelDto();
-        for (AllocationDto allocationDto : allocationDtoRequest.getAllocationDtos()){
-            if(allocationDto.isRanged()){
-
-                List<RoomDto> rooms = hotelMapper.hotelToHotelDto(hotelRepository.findById(allocationDto.getHotelDto().getId()).get()).getRooms();
-                for(int i = allocationDto.getStartIndex();i<allocationDto.getEndIndex();i++){
-                    rooms.get(i).setRoomType(allocationDto.getRoomTypeDto().getId());
-                }
-
-                List<Room> rooms1 = new ArrayList<>();
-                rooms.forEach((r->{rooms1.add(roomMapper.roomDtoToRoom(r));}));
-                roomRepository.saveAll(rooms1);
-
-                RoomType roomType = roomTypeRepository.findById(allocationDto.getRoomTypeDto().getId()).orElseThrow(()->new NotFoundException("Room type not found"));
-                roomType.setNumberOfRooms(allocationDto.getEndIndex()-allocationDto.getStartIndex());
-                roomTypeRepository.save(roomType);
-
-                hotelDto = allocationDto.getHotelDto();
-
-            }else{
-
-                List<RoomDto> rooms = hotelMapper.hotelToHotelDto(hotelRepository.findById(allocationDto.getHotelDto().getId()).get()).getRooms();;
-                for(int i : allocationDto.getIndexList()){
-                    rooms.get(i).setRoomType(allocationDto.getRoomTypeDto().getId());
-                }
-                List<Room> rooms1 = new ArrayList<>();
-                rooms.forEach((r->{rooms1.add(roomMapper.roomDtoToRoom(r));}));
-                roomRepository.saveAll(rooms1);
-
-                RoomType roomType = roomTypeRepository.findById(allocationDto.getRoomTypeDto().getId()).orElseThrow(()->new NotFoundException("Room type not found"));
-                roomType.setNumberOfRooms(allocationDto.getIndexList().size());
-                roomTypeRepository.save(roomType);
-
-                hotelDto = allocationDto.getHotelDto();
-            }
-
-
-        }
-
-        return hotelMapper.hotelToHotelDto(hotelRepository.findById(hotelDto.getId()).orElseThrow(()->new NotFoundException("Nije pronadjen hotel")));
     }
 
 
