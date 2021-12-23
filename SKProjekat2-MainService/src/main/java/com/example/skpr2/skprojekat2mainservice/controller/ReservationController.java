@@ -1,6 +1,7 @@
 package com.example.skpr2.skprojekat2mainservice.controller;
 
 
+import com.example.skpr2.skprojekat2mainservice.dto.HotelDto;
 import com.example.skpr2.skprojekat2mainservice.dto.ReservationDto;
 import com.example.skpr2.skprojekat2mainservice.security.CheckSecurity;
 import com.example.skpr2.skprojekat2mainservice.service.ReservationService;
@@ -32,5 +33,15 @@ public class ReservationController {
 
         return new ResponseEntity<>(reservationService.findAll(pageable), HttpStatus.OK);
     }
+
+    @ApiOperation(value = "Get all hotels")
+    @GetMapping("/hotel")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
+    public ResponseEntity<Page<HotelDto>> getAllHotels(@RequestHeader("Authorization") String authorization, Pageable pageable) {
+
+        return new ResponseEntity<>(reservationService.findAllHotels(pageable), HttpStatus.OK);
+    }
+
+
 
 }

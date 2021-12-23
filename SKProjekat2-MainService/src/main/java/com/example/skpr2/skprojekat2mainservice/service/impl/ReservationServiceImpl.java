@@ -2,8 +2,11 @@ package com.example.skpr2.skprojekat2mainservice.service.impl;
 
 
 
+import com.example.skpr2.skprojekat2mainservice.dto.HotelDto;
 import com.example.skpr2.skprojekat2mainservice.dto.ReservationDto;
+import com.example.skpr2.skprojekat2mainservice.mapper.HotelMapper;
 import com.example.skpr2.skprojekat2mainservice.mapper.ReservationMapper;
+import com.example.skpr2.skprojekat2mainservice.repository.HotelRepository;
 import com.example.skpr2.skprojekat2mainservice.repository.ReservationRepository;
 import com.example.skpr2.skprojekat2mainservice.service.ReservationService;
 import org.springframework.data.domain.Page;
@@ -19,12 +22,17 @@ public class ReservationServiceImpl implements ReservationService {
 
     private ReservationRepository reservationRepository;
     private ReservationMapper reservationMapper;
+    private HotelRepository hotelRepository;
+    private HotelMapper hotelMapper;
 
 
-    public ReservationServiceImpl(ReservationMapper reservationMapper, ReservationRepository reservationRepository) {
+    public ReservationServiceImpl(ReservationMapper reservationMapper, ReservationRepository reservationRepository,
+                                  HotelRepository hotelRepository, HotelMapper hotelMapper) {
 
         this.reservationMapper = reservationMapper;
         this.reservationRepository = reservationRepository;
+        this.hotelMapper = hotelMapper;
+        this.hotelRepository = hotelRepository;
 
     }
 
@@ -34,6 +42,11 @@ public class ReservationServiceImpl implements ReservationService {
                 .map(reservationMapper::reservationToReservationDto);
     }
 
+    @Override
+    public Page<HotelDto> findAllHotels(Pageable pageable) {
+        return hotelRepository.findAll(pageable)
+                .map(hotelMapper::hotelToHotelDto);
+    }
 
 
     //
