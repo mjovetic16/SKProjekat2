@@ -10,10 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/reservation")
@@ -40,6 +37,14 @@ public class ReservationController {
     public ResponseEntity<Page<HotelDto>> getAllHotels(@RequestHeader("Authorization") String authorization, Pageable pageable) {
 
         return new ResponseEntity<>(reservationService.findAllHotels(pageable), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Update hotel")
+    @PostMapping("/hotel/update")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
+    public ResponseEntity<HotelDto> updateHotel(@RequestHeader("Authorization") String authorization, @RequestBody HotelDto hotelDto) {
+
+        return new ResponseEntity<>(reservationService.updateHotel(hotelDto), HttpStatus.OK);
     }
 
 

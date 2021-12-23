@@ -37,6 +37,7 @@ public class TestDataRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        //Dodavanje hotela
         Hotel hotel1 = new Hotel();
         hotel1.setName("Hotel Beograd");
         hotel1.setDesc("Hotel u Beogradu");
@@ -45,6 +46,7 @@ public class TestDataRunner implements CommandLineRunner {
 
         hotelRepository.save(hotel1);
 
+        //Dodavanje roomtype-a
         RoomType roomType = new RoomType();
         roomType.setName("Tip A");
         roomType.setHotel(hotel1);
@@ -66,7 +68,7 @@ public class TestDataRunner implements CommandLineRunner {
         roomTypeRepository.save(roomTypeB);
 
 
-
+        //Dodavanje room-a
         List<Room> rooms = new ArrayList<>();
         for(int i =1; i<101; i++){
 

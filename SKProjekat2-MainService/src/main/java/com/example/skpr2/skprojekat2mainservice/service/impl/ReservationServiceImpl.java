@@ -2,8 +2,10 @@ package com.example.skpr2.skprojekat2mainservice.service.impl;
 
 
 
+import com.example.skpr2.skprojekat2mainservice.domain.Hotel;
 import com.example.skpr2.skprojekat2mainservice.dto.HotelDto;
 import com.example.skpr2.skprojekat2mainservice.dto.ReservationDto;
+import com.example.skpr2.skprojekat2mainservice.exception.NotFoundException;
 import com.example.skpr2.skprojekat2mainservice.mapper.HotelMapper;
 import com.example.skpr2.skprojekat2mainservice.mapper.ReservationMapper;
 import com.example.skpr2.skprojekat2mainservice.repository.HotelRepository;
@@ -46,6 +48,14 @@ public class ReservationServiceImpl implements ReservationService {
     public Page<HotelDto> findAllHotels(Pageable pageable) {
         return hotelRepository.findAll(pageable)
                 .map(hotelMapper::hotelToHotelDto);
+    }
+
+    @Override
+    public HotelDto updateHotel(HotelDto hotelDto) {
+        hotelRepository.findById(hotelDto.getId()).orElseThrow(()->new NotFoundException("Hotel ne postoji"));
+        Hotel hotel = hotelMapper.hotelDtoToHotel(hotelDto);
+
+        return hotelMapper.hotelToHotelDto(hotelRepository.save(hotel));
     }
 
 
