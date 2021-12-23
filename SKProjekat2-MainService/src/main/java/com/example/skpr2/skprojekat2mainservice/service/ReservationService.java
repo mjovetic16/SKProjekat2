@@ -1,6 +1,8 @@
 package com.example.skpr2.skprojekat2mainservice.service;
 
 import com.example.skpr2.skprojekat2mainservice.domain.Hotel;
+import com.example.skpr2.skprojekat2mainservice.dto.AllocationDto;
+import com.example.skpr2.skprojekat2mainservice.dto.AllocationDtoRequest;
 import com.example.skpr2.skprojekat2mainservice.dto.HotelDto;
 import com.example.skpr2.skprojekat2mainservice.dto.ReservationDto;
 import org.springframework.data.domain.Page;
@@ -15,4 +17,6 @@ public interface ReservationService {
     Page<HotelDto> findAllHotels(Pageable pageable);
 
     HotelDto updateHotel(HotelDto hotelDto);
+
+    HotelDto changeRoomAllocation(AllocationDtoRequest allocationDtoRequest);
 }

@@ -1,6 +1,8 @@
 package com.example.skpr2.skprojekat2mainservice.controller;
 
 
+import com.example.skpr2.skprojekat2mainservice.dto.AllocationDto;
+import com.example.skpr2.skprojekat2mainservice.dto.AllocationDtoRequest;
 import com.example.skpr2.skprojekat2mainservice.dto.HotelDto;
 import com.example.skpr2.skprojekat2mainservice.dto.ReservationDto;
 import com.example.skpr2.skprojekat2mainservice.security.CheckSecurity;
@@ -45,6 +47,14 @@ public class ReservationController {
     public ResponseEntity<HotelDto> updateHotel(@RequestHeader("Authorization") String authorization, @RequestBody HotelDto hotelDto) {
 
         return new ResponseEntity<>(reservationService.updateHotel(hotelDto), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Change room allocation")
+    @PostMapping("/hotel/allocation")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
+    public ResponseEntity<HotelDto> changeAllocation(@RequestHeader("Authorization") String authorization, @RequestBody AllocationDtoRequest allocationDtoRequest) {
+
+        return new ResponseEntity<>(reservationService.changeRoomAllocation(allocationDtoRequest), HttpStatus.OK);
     }
 
 
