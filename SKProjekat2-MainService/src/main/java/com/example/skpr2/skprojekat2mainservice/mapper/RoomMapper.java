@@ -4,12 +4,24 @@ import com.example.skpr2.skprojekat2mainservice.domain.Room;
 import com.example.skpr2.skprojekat2mainservice.domain.RoomType;
 import com.example.skpr2.skprojekat2mainservice.dto.RoomDto;
 import com.example.skpr2.skprojekat2mainservice.dto.RoomTypeDto;
+import com.example.skpr2.skprojekat2mainservice.exception.NotFoundException;
+import com.example.skpr2.skprojekat2mainservice.repository.HotelRepository;
+import com.example.skpr2.skprojekat2mainservice.repository.RoomRepository;
+import com.example.skpr2.skprojekat2mainservice.repository.RoomTypeRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RoomMapper {
 
-    public RoomMapper() {
+    private RoomRepository roomRepository;
+    private RoomTypeRepository roomTypeRepository;
+    private HotelRepository hotelRepository;
+
+    public RoomMapper(RoomTypeRepository roomTypeRepository, RoomRepository roomRepository, HotelRepository hotelRepository) {
+        this.roomRepository = roomRepository;
+        this.roomTypeRepository = roomTypeRepository;
+        this.hotelRepository = hotelRepository;
+
     }
 
 
@@ -28,6 +40,11 @@ public class RoomMapper {
     public Room roomDtoToRoom(RoomDto roomDto){
         Room room = new Room();
 
+        room.setId(roomDto.getId());
+        room.setName(roomDto.getName());
+        room.setHotel(hotelRepository.findById(roomDto.getHotel()).orElseThrow(()->new NotFoundException("Hotel not found")));
+        room.setRoomType(roomTypeRepository.findById(roomDto.getRoomType()).orElseThrow(()->new NotFoundException("RoomType not found")));
+
         return room;
     }
 
@@ -45,6 +62,16 @@ public class RoomMapper {
 
     public RoomType roomTypeDtoToRoomType(RoomTypeDto roomTypeDto){
         RoomType roomType = new RoomType();
+
+        roomType.setId(roomTypeDto.getId());
+        roomType.setName(roomTypeDto.getName());
+        roomType.setNumberOfRooms(roomTypeDto.getNumberOfRooms());
+        roomType.setPrice(roomTypeDto.getPrice());
+
+        System.out.println(roomTypeDto.toString());
+        System.out.println(hotelRepository.findById(roomTypeDto.getHotel()));
+
+        roomType.setHotel(hotelRepository.findById(roomTypeDto.getHotel()).orElseThrow(()->new NotFoundException("Hotel not found")));
 
         return roomType;
     }

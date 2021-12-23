@@ -79,7 +79,7 @@ public class ReservationServiceImpl implements ReservationService {
         for (AllocationDto allocationDto : allocationDtoRequest.getAllocationDtos()){
             if(allocationDto.isRanged()){
 
-                List<RoomDto> rooms = allocationDto.getHotelDto().getRooms();
+                List<RoomDto> rooms = hotelMapper.hotelToHotelDto(hotelRepository.findById(allocationDto.getHotelDto().getId()).get()).getRooms();
                 for(int i = allocationDto.getStartIndex();i<allocationDto.getEndIndex();i++){
                     rooms.get(i).setRoomType(allocationDto.getRoomTypeDto().getId());
                 }
@@ -88,15 +88,15 @@ public class ReservationServiceImpl implements ReservationService {
                 rooms.forEach((r->{rooms1.add(roomMapper.roomDtoToRoom(r));}));
                 roomRepository.saveAll(rooms1);
 
-                RoomTypeDto roomTypeDto = allocationDto.getRoomTypeDto();
-                roomTypeDto.setNumberOfRooms(allocationDto.getEndIndex()-allocationDto.getStartIndex());
-                roomTypeRepository.save(roomMapper.roomTypeDtoToRoomType(roomTypeDto));
+                RoomType roomType = roomTypeRepository.findById(allocationDto.getRoomTypeDto().getId()).orElseThrow(()->new NotFoundException("Room type not found"));
+                roomType.setNumberOfRooms(allocationDto.getEndIndex()-allocationDto.getStartIndex());
+                roomTypeRepository.save(roomType);
 
                 hotelDto = allocationDto.getHotelDto();
 
             }else{
 
-                List<RoomDto> rooms = allocationDto.getHotelDto().getRooms();
+                List<RoomDto> rooms = hotelMapper.hotelToHotelDto(hotelRepository.findById(allocationDto.getHotelDto().getId()).get()).getRooms();;
                 for(int i : allocationDto.getIndexList()){
                     rooms.get(i).setRoomType(allocationDto.getRoomTypeDto().getId());
                 }
@@ -104,9 +104,9 @@ public class ReservationServiceImpl implements ReservationService {
                 rooms.forEach((r->{rooms1.add(roomMapper.roomDtoToRoom(r));}));
                 roomRepository.saveAll(rooms1);
 
-                RoomTypeDto roomTypeDto = allocationDto.getRoomTypeDto();
-                roomTypeDto.setNumberOfRooms(allocationDto.getEndIndex()-allocationDto.getStartIndex());
-                roomTypeRepository.save(roomMapper.roomTypeDtoToRoomType(roomTypeDto));
+                RoomType roomType = roomTypeRepository.findById(allocationDto.getRoomTypeDto().getId()).orElseThrow(()->new NotFoundException("Room type not found"));
+                roomType.setNumberOfRooms(allocationDto.getIndexList().size());
+                roomTypeRepository.save(roomType);
 
                 hotelDto = allocationDto.getHotelDto();
             }
