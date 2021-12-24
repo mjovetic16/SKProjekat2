@@ -22,13 +22,15 @@ public class ReservationMapper {
     private AccommodationRepository accommodationRepository;
     private RoomTypeRepository roomTypeRepository;
     private RoomMapper roomMapper;
+    private HotelMapper hotelMapper;
 
     public ReservationMapper(HotelRepository hotelRepository, AccommodationRepository accommodationRepository, RoomMapper roomMapper,
-                             RoomTypeRepository roomTypeRepository) {
+                             RoomTypeRepository roomTypeRepository, HotelMapper hotelMapper) {
 
         this.hotelRepository = hotelRepository;
         this.accommodationRepository = accommodationRepository;
         this.roomMapper = roomMapper;
+        this.hotelMapper = hotelMapper;
         this.roomTypeRepository = roomTypeRepository;
 
 
@@ -51,10 +53,10 @@ public class ReservationMapper {
 
         terminDto.setId(termin.getId());
         terminDto.setCity(termin.getCity());
-        terminDto.setHotel(termin.getHotel().getId());
+        terminDto.setHotel(hotelMapper.hotelToHotelDtoRoomless(termin.getHotel()));
         terminDto.setDay(termin.getDay());
 
-        terminDto.setAccommodationDtos(termin.getAccommodation().stream().map(this::accommodationToAccommodationDto).collect(Collectors.toList()));
+        terminDto.setAccommodationDto(accommodationToAccommodationDto(termin.getAccommodation()));
 
         return terminDto;
     }
@@ -67,8 +69,8 @@ public class ReservationMapper {
         termin.setDay(terminDto.getDay());
 
 
-        termin.setAccommodation(terminDto.getAccommodationDtos().stream().map(this::accommodationDtoToAccommodation).collect(Collectors.toList()));
-        termin.setHotel(hotelRepository.findById(terminDto.getId()).orElseThrow(()->new NotFoundException("Nije pronadjen hotel")));
+        termin.setAccommodation(accommodationRepository.findById(terminDto.getAccommodationDto().getId()).orElseThrow(()->new NotFoundException("Nije pronadjen smestaj")));
+        termin.setHotel(hotelRepository.findById(terminDto.getHotel().getId()).orElseThrow(()->new NotFoundException("Nije pronadjen hotel")));
 
 
         return termin;

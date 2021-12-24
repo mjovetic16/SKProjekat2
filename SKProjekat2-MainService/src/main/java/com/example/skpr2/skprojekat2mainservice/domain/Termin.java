@@ -18,8 +18,8 @@ public class Termin {
 
     private Date day;
 
-    @OneToMany
-    private List<Accommodation> accommodation;
+    @ManyToOne
+    private Accommodation accommodation;
 
 
     public Long getId() {
@@ -54,11 +54,11 @@ public class Termin {
         this.day = day;
     }
 
-    public List<Accommodation> getAccommodation() {
+    public Accommodation getAccommodation() {
         return accommodation;
     }
 
-    public void setAccommodation(List<Accommodation> accommodation) {
+    public void setAccommodation(Accommodation accommodation) {
         this.accommodation = accommodation;
     }
 }

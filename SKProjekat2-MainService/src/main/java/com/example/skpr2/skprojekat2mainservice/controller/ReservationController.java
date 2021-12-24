@@ -6,11 +6,19 @@ import com.example.skpr2.skprojekat2mainservice.security.CheckSecurity;
 import com.example.skpr2.skprojekat2mainservice.service.HotelService;
 import com.example.skpr2.skprojekat2mainservice.service.ReservationService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/reservation")
@@ -64,6 +72,16 @@ public class ReservationController {
 
         return new ResponseEntity<>(reservationService.findAllTs(pageable), HttpStatus.OK);
     }
+
+    @ApiOperation(value = "Get all filtered")
+    @GetMapping("/termin/filter")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
+    public ResponseEntity<Page<TerminDto>> getAllFiltered(@RequestHeader("Authorization") String authorization, Pageable pageable, FilterDto filterDto) throws ParseException {
+
+        return new ResponseEntity<>(reservationService.findAllFiltered(pageable, filterDto), HttpStatus.OK);
+    }
+
+
 
 
 }

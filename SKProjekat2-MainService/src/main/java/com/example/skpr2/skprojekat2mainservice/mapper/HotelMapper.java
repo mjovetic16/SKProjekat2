@@ -5,6 +5,7 @@ import com.example.skpr2.skprojekat2mainservice.domain.Reservation;
 import com.example.skpr2.skprojekat2mainservice.domain.Room;
 import com.example.skpr2.skprojekat2mainservice.domain.RoomType;
 import com.example.skpr2.skprojekat2mainservice.dto.HotelDto;
+import com.example.skpr2.skprojekat2mainservice.dto.HotelDtoRoomless;
 import com.example.skpr2.skprojekat2mainservice.dto.ReservationDto;
 import com.example.skpr2.skprojekat2mainservice.exception.NotFoundException;
 import com.example.skpr2.skprojekat2mainservice.repository.RoomRepository;
@@ -36,6 +37,19 @@ public class HotelMapper {
         hotelDto.setDesc(hotel.getDesc());
         hotelDto.setNumberOfRooms(hotel.getNumberOfRooms());
         hotelDto.setRooms(hotel.getRooms().stream().map(roomMapper::roomToRoomDto).collect(Collectors.toList()));
+        hotelDto.setRoomTypes(hotel.getRoomTypes().stream().map(roomMapper::roomTypeToRoomTypeDto).collect(Collectors.toList()));
+
+        return hotelDto;
+
+    }
+
+    public HotelDtoRoomless hotelToHotelDtoRoomless(Hotel hotel){
+        HotelDtoRoomless hotelDto = new HotelDtoRoomless();
+
+        hotelDto.setId(hotel.getId());
+        hotelDto.setName(hotel.getName());
+        hotelDto.setDesc(hotel.getDesc());
+        hotelDto.setNumberOfRooms(hotel.getNumberOfRooms());
         hotelDto.setRoomTypes(hotel.getRoomTypes().stream().map(roomMapper::roomTypeToRoomTypeDto).collect(Collectors.toList()));
 
         return hotelDto;

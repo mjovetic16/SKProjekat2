@@ -144,10 +144,8 @@ public class TestDataRunner implements CommandLineRunner {
         termin1.setDay(new Date());
         termin1.setCity("Beograd");
 
-        ArrayList<Accommodation> termin1Acc = new ArrayList<>();
-        termin1Acc.add(accommodation1);
-        termin1Acc.add(accommodation2);
-        termin1.setAccommodation(termin1Acc);
+
+        termin1.setAccommodation(accommodation1);
 
 
         Termin termin2 = new Termin();
@@ -156,10 +154,8 @@ public class TestDataRunner implements CommandLineRunner {
         termin2.setDay(new Date());
         termin2.setCity("Beograd");
 
-        ArrayList<Accommodation> termin2Acc = new ArrayList<>();
-        termin2Acc.add(accommodation4);
-        termin2Acc.add(accommodation3);
-        termin2.setAccommodation(termin2Acc);
+
+        termin2.setAccommodation(accommodation2);
 
 
         Termin termin3 = new Termin();
@@ -168,10 +164,8 @@ public class TestDataRunner implements CommandLineRunner {
         termin3.setDay(new Date());
         termin3.setCity("Novi Sad");
 
-        ArrayList<Accommodation> termin3Acc = new ArrayList<>();
-        termin3Acc.add(accommodation5);
-        termin3Acc.add(accommodation6);
-        termin3.setAccommodation(termin3Acc);
+
+        termin3.setAccommodation(accommodation3);
 
 
         terminRepository.save(termin1);

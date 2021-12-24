@@ -13,11 +13,11 @@ public class TerminDto {
 
     private String city;
 
-    private Long hotel;
+    private HotelDtoRoomless hotel;
 
     private Date day;
 
-    private List<AccommodationDto> accommodationDtos;
+    private AccommodationDto accommodationDto;
 
     public Long getId() {
         return id;
@@ -35,11 +35,11 @@ public class TerminDto {
         this.city = city;
     }
 
-    public Long getHotel() {
+    public HotelDtoRoomless getHotel() {
         return hotel;
     }
 
-    public void setHotel(Long hotel) {
+    public void setHotel(HotelDtoRoomless hotel) {
         this.hotel = hotel;
     }
 
@@ -51,11 +51,11 @@ public class TerminDto {
         this.day = day;
     }
 
-    public List<AccommodationDto> getAccommodationDtos() {
-        return accommodationDtos;
+    public AccommodationDto getAccommodationDto() {
+        return accommodationDto;
     }
 
-    public void setAccommodationDtos(List<AccommodationDto> accommodationDtos) {
-        this.accommodationDtos = accommodationDtos;
+    public void setAccommodationDto(AccommodationDto accommodationDto) {
+        this.accommodationDto = accommodationDto;
     }
 }
