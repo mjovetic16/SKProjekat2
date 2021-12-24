@@ -1,5 +1,6 @@
 package com.example.skpr2.skprojekat2userservice.dto;
 
+import com.example.skpr2.skprojekat2userservice.domain.Rank;
 import com.example.skpr2.skprojekat2userservice.domain.Role;
 
 import javax.persistence.ManyToOne;
@@ -16,6 +17,8 @@ public class UserDto {
     private String phoneNumber;
     private Date birthDate;
 
+    private RankDto rank;
+
     private String passport;
     private Integer numberOfReservations;
 
@@ -24,6 +27,13 @@ public class UserDto {
 
     private String role;
 
+    public RankDto getRank() {
+        return rank;
+    }
+
+    public void setRank(RankDto rank) {
+        this.rank = rank;
+    }
 
     public Long getId() {
         return id;

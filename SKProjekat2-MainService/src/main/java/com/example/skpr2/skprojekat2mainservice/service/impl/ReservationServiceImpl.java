@@ -93,7 +93,7 @@ public class ReservationServiceImpl implements ReservationService {
         System.out.println(endDate);
         System.out.println(pageable);
 
-        return terminRepository.findByCityContainsAndHotelNameContainsAndDayGreaterThanAndDayLessThan(pageable,city,hotel,startDate,endDate)
+        return terminRepository.findByCityContainsAndHotelNameContainsAndDayGreaterThanAndDayLessThanAndAccommodationAvailableRoomsGreaterThan(pageable,city,hotel,startDate,endDate,0)
                 .map(reservationMapper::terminToTerminDto);
 
     }

@@ -16,6 +16,6 @@ import java.util.List;
 public interface TerminRepository extends JpaRepository<Termin, Long> {
 
 
-     Page<Termin> findByCityContainsAndHotelNameContainsAndDayGreaterThanAndDayLessThan(Pageable pageable, String city, String hotel, Date startDate, Date endDate);
+     Page<Termin> findByCityContainsAndHotelNameContainsAndDayGreaterThanAndDayLessThanAndAccommodationAvailableRoomsGreaterThan(Pageable pageable, String city, String hotel, Date startDate, Date endDate,int zero);
 
 }

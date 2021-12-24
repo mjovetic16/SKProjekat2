@@ -8,6 +8,7 @@ import com.example.skpr2.skprojekat2userservice.exception.BlockedException;
 import com.example.skpr2.skprojekat2userservice.exception.NotFoundException;
 import com.example.skpr2.skprojekat2userservice.mapper.UserMapper;
 import com.example.skpr2.skprojekat2userservice.repository.BlockedRepository;
+import com.example.skpr2.skprojekat2userservice.repository.RankRepository;
 import com.example.skpr2.skprojekat2userservice.repository.UserRepository;
 import com.example.skpr2.skprojekat2userservice.security.service.TokenService;
 import com.example.skpr2.skprojekat2userservice.service.UserService;
@@ -29,12 +30,15 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private UserMapper userMapper;
     private BlockedRepository blockedRepository;
+    private RankRepository rankRepository;
 
-    public UserServiceImpl(UserRepository userRepository, TokenService tokenService, UserMapper userMapper, BlockedRepository blockedRepository) {
+    public UserServiceImpl(UserRepository userRepository, TokenService tokenService, UserMapper userMapper, BlockedRepository blockedRepository,
+                           RankRepository rankRepository) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
         this.userMapper = userMapper;
         this.blockedRepository = blockedRepository;
+        this.rankRepository = rankRepository;
     }
 
     @Override
@@ -47,6 +51,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto add(UserCreateDto userCreateDto) {
         User user = userMapper.userCreateDtoToUser(userCreateDto);
+        user.setRank(rankRepository.getById(3L));
+        System.out.println(user.getRank());
         userRepository.save(user);
         return userMapper.userToUserDto(user);
     }

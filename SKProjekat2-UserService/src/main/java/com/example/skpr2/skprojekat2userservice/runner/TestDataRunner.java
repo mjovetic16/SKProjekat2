@@ -1,11 +1,9 @@
 package com.example.skpr2.skprojekat2userservice.runner;
 
 
-import com.example.skpr2.skprojekat2userservice.domain.Blocked;
-import com.example.skpr2.skprojekat2userservice.domain.Role;
-import com.example.skpr2.skprojekat2userservice.domain.RoleType;
-import com.example.skpr2.skprojekat2userservice.domain.User;
+import com.example.skpr2.skprojekat2userservice.domain.*;
 import com.example.skpr2.skprojekat2userservice.repository.BlockedRepository;
+import com.example.skpr2.skprojekat2userservice.repository.RankRepository;
 import com.example.skpr2.skprojekat2userservice.repository.RoleRepository;
 import com.example.skpr2.skprojekat2userservice.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -21,12 +19,15 @@ public class TestDataRunner implements CommandLineRunner {
     private RoleRepository roleRepository;
     private UserRepository userRepository;
     private BlockedRepository blockedRepository;
+    private RankRepository rankRepository;
 
 
-    public TestDataRunner(RoleRepository roleRepository, UserRepository userRepository, BlockedRepository blockedRepository) {
+    public TestDataRunner(RoleRepository roleRepository, UserRepository userRepository, BlockedRepository blockedRepository,
+                          RankRepository rankRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.blockedRepository = blockedRepository;
+        this.rankRepository = rankRepository;
     }
 
     @Override
@@ -47,8 +48,39 @@ public class TestDataRunner implements CommandLineRunner {
 
         blockedRepository.save(b);
 
+
+        //Insert Rank
+        Rank rank = new Rank();
+        rank.setId(1L);
+        rank.setName("Gold");
+        rank.setValue(15);
+        rank.setDiscount(20);
+
+
+        Rank rank2 = new Rank();
+        rank2.setId(2L);
+        rank2.setName("Silver");
+        rank2.setValue(7);
+        rank2.setDiscount(10);
+
+
+        Rank rank3 = new Rank();
+        rank3.setId(3L);
+        rank3.setName("Bronze");
+        rank3.setValue(0);
+        rank3.setDiscount(5);
+
+        rankRepository.save(rank);
+        rankRepository.save(rank2);
+        rankRepository.save(rank3);
+
+
+
+
         //Insert admin
+
         User admin = new User();
+        admin.setRank(rank);
         admin.setEmail("admin@gmail.com");
         admin.setUsername("admin");
         admin.setPassword("admin");

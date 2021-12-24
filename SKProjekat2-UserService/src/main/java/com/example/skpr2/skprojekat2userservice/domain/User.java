@@ -17,6 +17,9 @@ public class User {
     private String phoneNumber;
     private Date birthDate;
 
+    @ManyToOne
+    private Rank rank;
+
     private String passport;
     private Integer numberOfReservations;
 
@@ -27,6 +30,14 @@ public class User {
     @ManyToOne(optional = false)
     private Role role;
 
+
+    public Rank getRank() {
+        return rank;
+    }
+
+    public void setRank(Rank rank) {
+        this.rank = rank;
+    }
 
     public Long getId() {
         return id;

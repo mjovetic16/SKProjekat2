@@ -1,14 +1,8 @@
 package com.example.skpr2.skprojekat2userservice.mapper;
 
 
-import com.example.skpr2.skprojekat2userservice.domain.Blocked;
-import com.example.skpr2.skprojekat2userservice.domain.Role;
-import com.example.skpr2.skprojekat2userservice.domain.RoleType;
-import com.example.skpr2.skprojekat2userservice.domain.User;
-import com.example.skpr2.skprojekat2userservice.dto.BlockedDto;
-import com.example.skpr2.skprojekat2userservice.dto.ManagerCreateDto;
-import com.example.skpr2.skprojekat2userservice.dto.UserCreateDto;
-import com.example.skpr2.skprojekat2userservice.dto.UserDto;
+import com.example.skpr2.skprojekat2userservice.domain.*;
+import com.example.skpr2.skprojekat2userservice.dto.*;
 import com.example.skpr2.skprojekat2userservice.repository.RoleRepository;
 import org.springframework.stereotype.Component;
 
@@ -39,6 +33,7 @@ public class UserMapper {
 
         userDto.setHotel(user.getHotel());
         userDto.setDateOfEmployment(user.getDateOfEmployment());
+        userDto.setRank(rankToRankDto(user.getRank()));
         return userDto;
     }
 
@@ -59,6 +54,7 @@ public class UserMapper {
 
         user.setHotel(userDto.getHotel());
         user.setDateOfEmployment(userDto.getDateOfEmployment());
+        user.setRank(rankDtoToRank(userDto.getRank()));
         return user;
     }
 
@@ -93,6 +89,7 @@ public class UserMapper {
         user.setDateOfEmployment(managerCreateDto.getDateOfEmployment());
         user.setHotel(managerCreateDto.getHotel());
 
+
         return user;
     }
 
@@ -106,5 +103,28 @@ public class UserMapper {
 
         return bdto;
 
+    }
+
+    private Rank rankDtoToRank(RankDto rankDto){
+        Rank rank = new Rank();
+
+        rank.setValue(rankDto.getValue());
+        rank.setId(rankDto.getId());
+        rank.setName(rankDto.getName());
+        rank.setDiscount(rankDto.getDiscount());
+
+        return rank;
+
+    }
+
+    private RankDto rankToRankDto(Rank rank){
+        RankDto rankDto = new RankDto();
+
+        rankDto.setId(rank.getId());
+        rankDto.setName(rank.getName());
+        rankDto.setValue(rank.getValue());
+        rankDto.setDiscount(rank.getDiscount());
+
+        return rankDto;
     }
 }
