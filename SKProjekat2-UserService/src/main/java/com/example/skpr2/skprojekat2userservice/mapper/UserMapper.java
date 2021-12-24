@@ -105,7 +105,7 @@ public class UserMapper {
 
     }
 
-    private Rank rankDtoToRank(RankDto rankDto){
+    public Rank rankDtoToRank(RankDto rankDto){
         Rank rank = new Rank();
 
         rank.setValue(rankDto.getValue());
@@ -117,7 +117,7 @@ public class UserMapper {
 
     }
 
-    private RankDto rankToRankDto(Rank rank){
+    public RankDto rankToRankDto(Rank rank){
         RankDto rankDto = new RankDto();
 
         rankDto.setId(rank.getId());

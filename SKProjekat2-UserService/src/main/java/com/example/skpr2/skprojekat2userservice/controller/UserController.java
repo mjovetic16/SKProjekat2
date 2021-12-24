@@ -80,4 +80,11 @@ public class UserController {
         return new ResponseEntity<>(userService.getBlocked(),HttpStatus.OK);
     }
 
+    @ApiOperation(value="Change Rank")
+    @PostMapping("/rank")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
+    public ResponseEntity<RankDto> changeRank(@RequestHeader("Authorization") String authorization, @RequestBody RankDto rankDto){
+        return new ResponseEntity<>(userService.changeRank(rankDto),HttpStatus.OK);
+    }
+
 }

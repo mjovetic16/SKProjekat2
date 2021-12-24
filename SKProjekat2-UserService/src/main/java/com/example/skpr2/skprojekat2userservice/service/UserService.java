@@ -24,4 +24,6 @@ public interface UserService {
     boolean isBlocked(UserDto userDto);
 
     BlockedDto getBlocked();
+
+    RankDto changeRank(RankDto rankDto);
 }

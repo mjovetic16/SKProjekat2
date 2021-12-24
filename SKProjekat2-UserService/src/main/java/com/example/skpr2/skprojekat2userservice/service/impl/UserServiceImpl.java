@@ -104,6 +104,11 @@ public class UserServiceImpl implements UserService {
 
 
         if(user.getId().equals(Long.valueOf(claims.get("id",Integer.class)))){
+            if(userDto.getRank().getName().equals(user.getRank().getName())){
+                //
+            }else{
+                throw new BlockedException(String.format("User can't change his rank"));
+            }
 
             if(userDto.getRole().equals(user.getRole().getName().name())){
                 return userMapper.userToUserDto(userRepository.save(userMapper.userDtoToUser(userDto)));
@@ -149,6 +154,12 @@ public class UserServiceImpl implements UserService {
         Blocked blocked = blockedRepository.findById(1).get();
 
         return userMapper.blockedToBlockedDto(blocked);
+    }
+
+    @Override
+    public RankDto changeRank(RankDto rankDto){
+        return userMapper.rankToRankDto(rankRepository.save(userMapper.rankDtoToRank(rankDto)));
+
     }
 
     //
