@@ -2,22 +2,27 @@ package com.example.skpr2.skprojekat2mainservice.service.impl;
 
 
 
-import com.example.skpr2.skprojekat2mainservice.domain.Hotel;
-import com.example.skpr2.skprojekat2mainservice.domain.Room;
-import com.example.skpr2.skprojekat2mainservice.domain.RoomType;
+import com.example.skpr2.skprojekat2mainservice.domain.*;
 import com.example.skpr2.skprojekat2mainservice.dto.*;
 import com.example.skpr2.skprojekat2mainservice.exception.NotFoundException;
 import com.example.skpr2.skprojekat2mainservice.mapper.HotelMapper;
 import com.example.skpr2.skprojekat2mainservice.mapper.ReservationMapper;
 import com.example.skpr2.skprojekat2mainservice.mapper.RoomMapper;
 import com.example.skpr2.skprojekat2mainservice.repository.*;
+import com.example.skpr2.skprojekat2mainservice.security.service.TokenService;
 import com.example.skpr2.skprojekat2mainservice.service.ReservationService;
+import io.jsonwebtoken.Claims;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,15 +40,20 @@ public class ReservationServiceImpl implements ReservationService {
 
     private ReservationMapper reservationMapper;
 
+    private TokenService tokenService;
 
 
-    public ReservationServiceImpl(ReservationMapper reservationMapper, ReservationRepository reservationRepository, TerminRepository terminRepository) {
+
+    public ReservationServiceImpl(ReservationMapper reservationMapper, ReservationRepository reservationRepository,
+                                  TerminRepository terminRepository, TokenService tokenService) {
 
         this.reservationMapper = reservationMapper;
 
         this.reservationRepository = reservationRepository;
 
         this.terminRepository = terminRepository;
+
+        this.tokenService = tokenService;
 
     }
 
@@ -98,6 +108,101 @@ public class ReservationServiceImpl implements ReservationService {
 
     }
 
+    @Override
+    public ReservationDto reserve(String authorization, TerminDto terminDto) {
+        authorization = authorization.replace("Bearer ", "");
+        Claims claims = tokenService.parseToken(authorization);
+
+        int id = claims.get("id",Integer.class);
+
+
+        //Get user from User Service
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + authorization);
+
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+        ResponseEntity<UserDto> response = restTemplate.exchange("http://localhost:8080/api/user/"+id, HttpMethod.GET, request, UserDto.class);
+        UserDto userDto = response.getBody();
+
+        if(userDto==null){
+            throw new NotFoundException("User not found");
+        }
+
+        Termin termin = terminRepository.findById(terminDto.getId()).orElseThrow(()->new NotFoundException("Nije pronadjen termin"));
+
+
+        //Calculate price
+        RankDto rankDto = userDto.getRank();
+        float price = (float)terminDto.getAccommodationDto().getRoomType().getPrice() *(1f-(1f/100*rankDto.getDiscount()));
+
+        //Make reservation
+        Reservation reservation = new Reservation();
+        reservation.setUserID(userDto.getId());
+        reservation.setTermin(reservationMapper.terminDtoToTermin(terminDto));
+        reservation.setPrice(price);
+
+
+        //Change user Res Number
+        ResponseEntity<UserDto> response2 = restTemplate.exchange("http://localhost:8080/api/user/reservation/"+id+"/true", HttpMethod.POST, request, UserDto.class);
+        UserDto userDto2 = response2.getBody();
+
+        System.out.println(userDto2);
+
+        //Change termin available rooms
+        termin.getAccommodation().setAvailableRooms(termin.getAccommodation().getAvailableRooms()-1);
+        terminRepository.save(termin);
+
+        reservation.setTermin(termin);
+
+        //TODO Retry pattern
+
+        //Save reservation
+        return reservationMapper.reservationToReservationDto(reservationRepository.save(reservation));
+    }
+
+    @Override
+    public ReservationDto cancelReservation(String authorization, ReservationDto reservationDto) {
+        authorization = authorization.replace("Bearer ", "");
+        Claims claims = tokenService.parseToken(authorization);
+
+        int id = claims.get("id", Integer.class);
+
+
+        //Get user from User Service
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + authorization);
+
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+        ResponseEntity<UserDto> response = restTemplate.exchange("http://localhost:8080/api/user/" + id, HttpMethod.GET, request, UserDto.class);
+        UserDto userDto = response.getBody();
+
+        if (userDto == null) {
+            throw new NotFoundException("User not found");
+        }
+
+        Termin termin = terminRepository.findById(reservationDto.getTerminDto().getId()).orElseThrow(() -> new NotFoundException("Nije pronadjen termin"));
+
+
+        //Change user Res Number
+        ResponseEntity<UserDto> response2 = restTemplate.exchange("http://localhost:8080/api/user/reservation/" + id + "/false", HttpMethod.POST, request, UserDto.class);
+        UserDto userDto2 = response2.getBody();
+
+        System.out.println(userDto2);
+
+        //Change termin available rooms
+        termin.getAccommodation().setAvailableRooms(termin.getAccommodation().getAvailableRooms() + 1);
+        terminRepository.save(termin);
+
+        //Save reservation
+        reservationRepository.delete(reservationRepository.findById(reservationDto.getId()).orElseThrow(()->new NotFoundException("Reservation doesn't exist")));
+
+        ReservationDto reservationDtoEmpty = new ReservationDto();
+        reservationDtoEmpty.setTerminDto(reservationMapper.terminToTerminDto(termin));
+
+        return reservationDtoEmpty;
+    }
 
 
     //

@@ -15,6 +15,8 @@ public interface UserService {
 
     UserDto updateUser(UserDto userDto, String auth);
 
+    UserDto getUser(int id);
+
     TokenResponseDto login(TokenRequestDto tokenRequestDto);
 
     BlockedDto block(UserDto userDto);
@@ -26,4 +28,6 @@ public interface UserService {
     BlockedDto getBlocked();
 
     RankDto changeRank(RankDto rankDto);
+
+    UserDto changeRes(int id, boolean addition);
 }

@@ -2,6 +2,7 @@ package com.example.skpr2.skprojekat2userservice.service.impl;
 
 
 import com.example.skpr2.skprojekat2userservice.domain.Blocked;
+import com.example.skpr2.skprojekat2userservice.domain.Rank;
 import com.example.skpr2.skprojekat2userservice.domain.User;
 import com.example.skpr2.skprojekat2userservice.dto.*;
 import com.example.skpr2.skprojekat2userservice.exception.BlockedException;
@@ -16,6 +17,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -122,6 +124,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto getUser(int id) {
+        return userMapper.userToUserDto(userRepository.findUserById((long)id).orElseThrow(()->new NotFoundException("User not found")));
+    }
+
+    @Override
     public BlockedDto block(UserDto userDto) {
 
         Blocked blocked = blockedRepository.findById(1).get();
@@ -160,6 +167,31 @@ public class UserServiceImpl implements UserService {
     public RankDto changeRank(RankDto rankDto){
         return userMapper.rankToRankDto(rankRepository.save(userMapper.rankDtoToRank(rankDto)));
 
+    }
+
+    @Override
+    public UserDto changeRes(int id, boolean addition) {
+
+        User user = userRepository.findUserById((long)id).orElseThrow(()->new NotFoundException("Korisnik ne postoji"));
+
+        if(addition){
+            user.setNumberOfReservations(user.getNumberOfReservations()+1);
+        }else{
+            user.setNumberOfReservations(user.getNumberOfReservations()-1);
+        }
+
+        //Menjanje ranga
+
+        List<Rank> ranks = new ArrayList<>();
+        ranks = rankRepository.findAll(Sort.by("value").ascending());
+
+        ranks.forEach((r)->{
+            if(user.getNumberOfReservations()>=r.getValue()){
+                user.setRank(r);
+            }
+        ;});
+
+        return userMapper.userToUserDto(userRepository.save(user));
     }
 
     //

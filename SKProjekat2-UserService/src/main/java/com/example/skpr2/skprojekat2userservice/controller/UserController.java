@@ -87,4 +87,18 @@ public class UserController {
         return new ResponseEntity<>(userService.changeRank(rankDto),HttpStatus.OK);
     }
 
+    @ApiOperation(value="Get user by ID")
+    @GetMapping("/{id}")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
+    public ResponseEntity<UserDto> getUser(@RequestHeader("Authorization") String authorization, @PathVariable int id){
+        return new ResponseEntity<>(userService.getUser(id),HttpStatus.OK);
+    }
+
+    @ApiOperation(value="Change Res Number")
+    @PostMapping("/reservation/{id}/{addition}")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
+    public ResponseEntity<UserDto> changeRes(@RequestHeader("Authorization") String authorization, @PathVariable int id, @PathVariable boolean addition){
+        return new ResponseEntity<>(userService.changeRes(id,addition),HttpStatus.OK);
+    }
+
 }

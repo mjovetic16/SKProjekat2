@@ -39,11 +39,21 @@ public class ReservationMapper {
     public ReservationDto reservationToReservationDto(Reservation reservation) {
         ReservationDto reservationDto = new ReservationDto();
 
+        reservationDto.setUserID(reservation.getUserID());
+        reservationDto.setId(reservation.getId());
+        reservationDto.setTerminDto(terminToTerminDto(reservation.getTermin()));
+        reservationDto.setPrice(reservation.getPrice());
+
         return reservationDto;
     }
 
     public Reservation reservationDtoToReservation(ReservationDto reservationDto) {
         Reservation reservation = new Reservation();
+
+        reservation.setId(reservationDto.getId());
+        reservation.setUserID(reservationDto.getUserID());
+        reservation.setTermin(terminDtoToTermin(reservationDto.getTerminDto()));
+        reservation.setPrice(reservationDto.getPrice());
 
         return reservation;
     }

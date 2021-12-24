@@ -81,7 +81,21 @@ public class ReservationController {
         return new ResponseEntity<>(reservationService.findAllFiltered(pageable, filterDto), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Reserve")
+    @PostMapping
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
+    public ResponseEntity<ReservationDto> reserve(@RequestHeader("Authorization") String authorization, @RequestBody TerminDto terminDto) {
 
+        return new ResponseEntity<>(reservationService.reserve(authorization,terminDto), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Cancel reservation")
+    @PostMapping("/cancel")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
+    public ResponseEntity<ReservationDto> cancelReservation(@RequestHeader("Authorization") String authorization, @RequestBody ReservationDto reservationDto) {
+
+        return new ResponseEntity<>(reservationService.cancelReservation(authorization,reservationDto), HttpStatus.OK);
+    }
 
 
 }
