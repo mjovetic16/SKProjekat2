@@ -5,6 +5,7 @@ import com.example.skpr2.skprojekat2mainservice.dto.*;
 import com.example.skpr2.skprojekat2mainservice.security.CheckSecurity;
 import com.example.skpr2.skprojekat2mainservice.service.HotelService;
 import com.example.skpr2.skprojekat2mainservice.service.ReservationService;
+import com.example.skpr2.skprojekat2mainservice.service.ReviewService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/reservation")
@@ -26,10 +28,12 @@ public class ReservationController {
 
     private ReservationService reservationService;
     private HotelService hotelService;
+    private ReviewService reviewService;
 
-    public ReservationController(ReservationService reservationService, HotelService hotelService) {
+    public ReservationController(ReservationService reservationService, HotelService hotelService, ReviewService reviewService) {
         this.reservationService = reservationService;
         this.hotelService = hotelService;
+        this.reviewService = reviewService;
     }
 
     @ApiOperation(value = "Get all reservations")
@@ -95,6 +99,38 @@ public class ReservationController {
     public ResponseEntity<ReservationDto> cancelReservation(@RequestHeader("Authorization") String authorization, @RequestBody ReservationDto reservationDto) {
 
         return new ResponseEntity<>(reservationService.cancelReservation(authorization,reservationDto), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Make review")
+    @PostMapping("/review")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
+    public ResponseEntity<ReviewDto> makeReview(@RequestHeader("Authorization") String authorization, @RequestBody ReviewDto reviewDto) {
+
+        return new ResponseEntity<>(reviewService.makeReview(authorization,reviewDto), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Get filtered reviews")
+    @PostMapping("/review/filter")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
+    public ResponseEntity<Page<ReviewDto>> getFilteredReviews(@RequestHeader("Authorization") String authorization, @RequestBody FilterDto filterDto, Pageable pageable) {
+
+        return new ResponseEntity<>(reviewService.getFilteredReviews(authorization,filterDto, pageable), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Delete review")
+    @DeleteMapping("/review")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
+    public ResponseEntity<ReviewDto> deleteReview(@RequestHeader("Authorization") String authorization, @RequestBody ReviewDto reviewDto) {
+
+        return new ResponseEntity<>(reviewService.deleteReview(authorization,reviewDto), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Get best hotels")
+    @GetMapping("/hotel/review")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
+    public ResponseEntity<List<HotelDto>> getBestHotels(@RequestHeader("Authorization") String authorization) {
+
+        return new ResponseEntity<>(reviewService.getBestHotels(authorization), HttpStatus.OK);
     }
 
 
