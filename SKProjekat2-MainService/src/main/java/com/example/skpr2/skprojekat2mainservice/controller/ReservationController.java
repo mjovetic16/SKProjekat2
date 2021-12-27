@@ -2,16 +2,19 @@ package com.example.skpr2.skprojekat2mainservice.controller;
 
 
 import com.example.skpr2.skprojekat2mainservice.dto.*;
+import com.example.skpr2.skprojekat2mainservice.helper.MessageHelper;
 import com.example.skpr2.skprojekat2mainservice.security.CheckSecurity;
 import com.example.skpr2.skprojekat2mainservice.service.HotelService;
 import com.example.skpr2.skprojekat2mainservice.service.ReservationService;
 import com.example.skpr2.skprojekat2mainservice.service.ReviewService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -29,18 +32,29 @@ public class ReservationController {
     private ReservationService reservationService;
     private HotelService hotelService;
     private ReviewService reviewService;
+    private JmsTemplate jmsTemplate;
+    private MessageHelper messageHelper;
+    private String orderDestination;
 
-    public ReservationController(ReservationService reservationService, HotelService hotelService, ReviewService reviewService) {
+    public ReservationController(ReservationService reservationService, HotelService hotelService, ReviewService reviewService,
+                                 MessageHelper messageHelper, JmsTemplate jmsTemplate, @Value("${destination.createOrder}") String orderDestination) {
         this.reservationService = reservationService;
         this.hotelService = hotelService;
         this.reviewService = reviewService;
+        this.jmsTemplate = jmsTemplate;
+        this.messageHelper = messageHelper;
+        this.orderDestination = orderDestination;
     }
+
+
 
     @ApiOperation(value = "Get all reservations")
     @GetMapping
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
     public ResponseEntity<Page<ReservationDto>> getAllReservations(@RequestHeader("Authorization") String authorization,
                                                                    Pageable pageable) {
+
+        jmsTemplate.convertAndSend(orderDestination, messageHelper.createTextMessage(""));
 
         return new ResponseEntity<>(reservationService.findAll(pageable), HttpStatus.OK);
     }
