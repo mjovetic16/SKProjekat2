@@ -7,6 +7,7 @@ import com.example.skpr2.skprojekat2userservice.domain.User;
 import com.example.skpr2.skprojekat2userservice.dto.*;
 import com.example.skpr2.skprojekat2userservice.exception.BlockedException;
 import com.example.skpr2.skprojekat2userservice.exception.NotFoundException;
+import com.example.skpr2.skprojekat2userservice.helper.MessageHelper;
 import com.example.skpr2.skprojekat2userservice.mapper.UserMapper;
 import com.example.skpr2.skprojekat2userservice.repository.BlockedRepository;
 import com.example.skpr2.skprojekat2userservice.repository.RankRepository;
@@ -15,9 +16,11 @@ import com.example.skpr2.skprojekat2userservice.security.service.TokenService;
 import com.example.skpr2.skprojekat2userservice.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,14 +36,20 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     private BlockedRepository blockedRepository;
     private RankRepository rankRepository;
+    private JmsTemplate jmsTemplate;
+    private MessageHelper messageHelper;
+    private String registerDestination;
 
     public UserServiceImpl(UserRepository userRepository, TokenService tokenService, UserMapper userMapper, BlockedRepository blockedRepository,
-                           RankRepository rankRepository) {
+                           RankRepository rankRepository, JmsTemplate jmsTemplate, MessageHelper messageHelper, @Value("${destination.registerNotify}") String registerDestination) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
         this.userMapper = userMapper;
         this.blockedRepository = blockedRepository;
         this.rankRepository = rankRepository;
+        this.jmsTemplate = jmsTemplate;
+        this.messageHelper = messageHelper;
+        this.registerDestination = registerDestination;
     }
 
     @Override
@@ -55,14 +64,18 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.userCreateDtoToUser(userCreateDto);
         user.setRank(rankRepository.getById(3L));
         System.out.println(user.getRank());
-        userRepository.save(user);
+        User user1 = userRepository.save(user);
+
+        registerNotify(userMapper.userToUserDto(user1));
         return userMapper.userToUserDto(user);
     }
 
     @Override
     public UserDto addManager(ManagerCreateDto managerCreateDto) {
         User user = userMapper.managerCreateDtoToUser(managerCreateDto);
-        userRepository.save(user);
+        User user1 = userRepository.save(user);
+
+        registerNotify(userMapper.userToUserDto(user1));
         return userMapper.userToUserDto(user);
     }
 
@@ -192,6 +205,11 @@ public class UserServiceImpl implements UserService {
         ;});
 
         return userMapper.userToUserDto(userRepository.save(user));
+    }
+
+    public void registerNotify(UserDto userDto){
+        jmsTemplate.convertAndSend(registerDestination, messageHelper.createTextMessage(userDto));
+
     }
 
     //
