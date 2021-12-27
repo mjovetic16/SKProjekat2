@@ -59,6 +59,8 @@ public class ReservationController {
         return new ResponseEntity<>(reservationService.findAll(pageable), HttpStatus.OK);
     }
 
+
+
     @ApiOperation(value = "Get all hotels")
     @GetMapping("/hotel")
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})

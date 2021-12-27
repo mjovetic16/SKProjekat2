@@ -6,6 +6,7 @@
         <option value="$PROJECT_DIR$/SKProjekat2-MainService/pom.xml" />
         <option value="$PROJECT_DIR$/SKProjekat2-UserService/pom.xml" />
         <option value="$PROJECT_DIR$/SKProjekat2-NotificationService/pom.xml" />
+        <option value="$PROJECT_DIR$/SKProjekat2-APIGateway/pom.xml" />
       </list>
     </option>
   </component>

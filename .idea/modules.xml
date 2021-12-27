@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/SKProjekat2.iml" filepath="$PROJECT_DIR$/.idea/SKProjekat2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SKProjekat2-APIGateway/SKProjekat2-APIGateway.iml" filepath="$PROJECT_DIR$/SKProjekat2-APIGateway/SKProjekat2-APIGateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/SKProjekat2-MainService/SKProjekat2-MainService.iml" filepath="$PROJECT_DIR$/SKProjekat2-MainService/SKProjekat2-MainService.iml" />
       <module fileurl="file://$PROJECT_DIR$/SKProjekat2-NotificationService/SKProjekat2-NotificationService.iml" filepath="$PROJECT_DIR$/SKProjekat2-NotificationService/SKProjekat2-NotificationService.iml" />
       <module fileurl="file://$PROJECT_DIR$/SKProjekat2-UserService/SKProjekat2-UserService.iml" filepath="$PROJECT_DIR$/SKProjekat2-UserService/SKProjekat2-UserService.iml" />

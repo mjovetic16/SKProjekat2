@@ -122,7 +122,7 @@ public class ReservationServiceImpl implements ReservationService {
         headers.add("Authorization", "Bearer " + authorization);
 
         HttpEntity<String> request = new HttpEntity<String>(headers);
-        ResponseEntity<UserDto> response = restTemplate.exchange("http://localhost:8080/api/user/"+id, HttpMethod.GET, request, UserDto.class);
+        ResponseEntity<UserDto> response = restTemplate.exchange("http://localhost:8083/users/user/"+id, HttpMethod.GET, request, UserDto.class);
         UserDto userDto = response.getBody();
 
         if(userDto==null){
