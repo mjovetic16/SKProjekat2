@@ -2,6 +2,8 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/SKProjekat2-MainService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SKProjekat2-NotificationService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SKProjekat2-NotificationService/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/SKProjekat2-UserService/src/main/java" charset="UTF-8" />
   </component>
 </project>

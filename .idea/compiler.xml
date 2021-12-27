@@ -9,16 +9,19 @@
         <outputRelativeToContentRoot value="true" />
         <module name="SKProjekat2-UserService" />
         <module name="SKProjekat2-MainService" />
+        <module name="SKProjekat2-NotificationService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="SKProjekat2-MainService" target="1.8" />
+      <module name="SKProjekat2-NotificationService" target="1.8" />
       <module name="SKProjekat2-UserService" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="SKProjekat2-MainService" options="-parameters" />
+      <module name="SKProjekat2-NotificationService" options="-parameters" />
       <module name="SKProjekat2-UserService" options="-parameters" />
     </option>
   </component>
