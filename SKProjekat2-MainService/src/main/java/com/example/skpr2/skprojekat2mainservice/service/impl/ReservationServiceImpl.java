@@ -5,6 +5,7 @@ package com.example.skpr2.skprojekat2mainservice.service.impl;
 import com.example.skpr2.skprojekat2mainservice.domain.*;
 import com.example.skpr2.skprojekat2mainservice.dto.*;
 import com.example.skpr2.skprojekat2mainservice.exception.NotFoundException;
+import com.example.skpr2.skprojekat2mainservice.helper.MessageHelper;
 import com.example.skpr2.skprojekat2mainservice.mapper.HotelMapper;
 import com.example.skpr2.skprojekat2mainservice.mapper.ReservationMapper;
 import com.example.skpr2.skprojekat2mainservice.mapper.RoomMapper;
@@ -12,6 +13,7 @@ import com.example.skpr2.skprojekat2mainservice.repository.*;
 import com.example.skpr2.skprojekat2mainservice.security.service.TokenService;
 import com.example.skpr2.skprojekat2mainservice.service.ReservationService;
 import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -42,10 +45,20 @@ public class ReservationServiceImpl implements ReservationService {
 
     private TokenService tokenService;
 
+    private JmsTemplate jmsTemplate;
+
+    private MessageHelper messageHelper;
+
+    private String reservationDest;
+
+    private String cancelReservationDest;
+
 
 
     public ReservationServiceImpl(ReservationMapper reservationMapper, ReservationRepository reservationRepository,
-                                  TerminRepository terminRepository, TokenService tokenService) {
+                                  TerminRepository terminRepository, TokenService tokenService, JmsTemplate jmsTemplate,
+                                  MessageHelper messageHelper, @Value("${destination.reservationNotify}")String reservationDest,
+                                  @Value("${destination.cancelReservationNotify}")String cancelReservationDest) {
 
         this.reservationMapper = reservationMapper;
 
@@ -54,6 +67,14 @@ public class ReservationServiceImpl implements ReservationService {
         this.terminRepository = terminRepository;
 
         this.tokenService = tokenService;
+
+        this.jmsTemplate = jmsTemplate;
+
+        this.messageHelper = messageHelper;
+
+        this.reservationDest = reservationDest;
+
+        this.cancelReservationDest = cancelReservationDest;
 
     }
 
@@ -142,6 +163,8 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setTermin(reservationMapper.terminDtoToTermin(terminDto));
         reservation.setPrice(price);
 
+        System.out.println("The price is: "+reservation.getPrice());
+
 
         //Change user Res Number
         ResponseEntity<UserDto> response2 = restTemplate.exchange("http://localhost:8080/api/user/reservation/"+id+"/true", HttpMethod.POST, request, UserDto.class);
@@ -158,7 +181,15 @@ public class ReservationServiceImpl implements ReservationService {
         //TODO Retry pattern
 
         //Save reservation
-        return reservationMapper.reservationToReservationDto(reservationRepository.save(reservation));
+        ReservationDto rDto = reservationMapper.reservationToReservationDto(reservationRepository.save(reservation));
+
+        //Slanje konfirmacije na notification service
+        ReservationUserDto rUserDto = reservationMapper.reservationUserDtoFromReservationDto(rDto);
+        rUserDto.setUserDto(userDto2);
+        jmsTemplate.convertAndSend(reservationDest,messageHelper.createTextMessage(rUserDto));
+
+
+        return rDto;
     }
 
     @Override
@@ -200,6 +231,11 @@ public class ReservationServiceImpl implements ReservationService {
 
         ReservationDto reservationDtoEmpty = new ReservationDto();
         reservationDtoEmpty.setTerminDto(reservationMapper.terminToTerminDto(termin));
+
+        //Slanje konfirmacije na notification service
+        ReservationUserDto rUserDto = reservationMapper.reservationUserDtoFromReservationDto(reservationDtoEmpty);
+        rUserDto.setUserDto(userDto2);
+        jmsTemplate.convertAndSend(cancelReservationDest,messageHelper.createTextMessage(rUserDto));
 
         return reservationDtoEmpty;
     }

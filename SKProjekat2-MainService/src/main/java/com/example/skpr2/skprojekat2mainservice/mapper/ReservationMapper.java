@@ -5,6 +5,7 @@ import com.example.skpr2.skprojekat2mainservice.domain.Reservation;
 import com.example.skpr2.skprojekat2mainservice.domain.Termin;
 import com.example.skpr2.skprojekat2mainservice.dto.AccommodationDto;
 import com.example.skpr2.skprojekat2mainservice.dto.ReservationDto;
+import com.example.skpr2.skprojekat2mainservice.dto.ReservationUserDto;
 import com.example.skpr2.skprojekat2mainservice.dto.TerminDto;
 import com.example.skpr2.skprojekat2mainservice.exception.NotFoundException;
 import com.example.skpr2.skprojekat2mainservice.repository.AccommodationRepository;
@@ -106,6 +107,17 @@ public class ReservationMapper {
         accommodation.setRoomType(roomTypeRepository.findById(accommodationDto.getRoomType().getId()).orElseThrow(()->new NotFoundException("RoomType not found")));
 
         return accommodation;
+
+    }
+
+    public ReservationUserDto reservationUserDtoFromReservationDto(ReservationDto reservationDto){
+        ReservationUserDto reservationUserDto = new ReservationUserDto();
+
+        reservationUserDto.setId(reservationDto.getId());
+        reservationUserDto.setTerminDto(reservationDto.getTerminDto());
+        reservationUserDto.setPrice(reservationDto.getPrice());
+
+        return reservationUserDto;
 
     }
 
