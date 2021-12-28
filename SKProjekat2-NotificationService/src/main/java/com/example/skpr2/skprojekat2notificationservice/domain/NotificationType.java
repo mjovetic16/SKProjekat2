@@ -14,7 +14,7 @@ public class NotificationType {
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Parameter> parameters;
 
     public Long getId() {

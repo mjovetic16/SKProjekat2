@@ -1,9 +1,11 @@
 package com.example.skpr2.skprojekat2notificationservice.service.impl;
 
 import com.example.skpr2.skprojekat2notificationservice.domain.Notification;
+import com.example.skpr2.skprojekat2notificationservice.domain.NotificationType;
 import com.example.skpr2.skprojekat2notificationservice.domain.Parameter;
 import com.example.skpr2.skprojekat2notificationservice.dto.NotificationTypeDto;
 import com.example.skpr2.skprojekat2notificationservice.dto.ParameterDto;
+import com.example.skpr2.skprojekat2notificationservice.dto.UserDto;
 import com.example.skpr2.skprojekat2notificationservice.exception.NotFoundException;
 import com.example.skpr2.skprojekat2notificationservice.mapper.NotificationMapper;
 import com.example.skpr2.skprojekat2notificationservice.repository.NotificationRepository;
@@ -15,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,7 +48,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public NotificationTypeDto addType(NotificationTypeDto notificationTypeDto) {
 
-        NotificationTypeDto notificationTypeDto1 = notificationTypeDto;
+
         ArrayList<Parameter> parameters = new ArrayList<>();
 
         for(ParameterDto p:notificationTypeDto.getParameters()){
@@ -55,12 +59,12 @@ public class NotificationServiceImpl implements NotificationService {
                 parameters.add(parameterRepository.save(notificationMapper.parameterDtoToParameter(p)));
             }
         }
-        notificationTypeDto1.setParameters(parameters.stream().map(notificationMapper::parameterToParameterDto).collect(Collectors.toList()));
+        notificationTypeDto.setParameters(parameters.stream().map(notificationMapper::parameterToParameterDto).collect(Collectors.toList()));
 
 
 
         return notificationMapper.notificationTypeToNotificationTypeDto(notificationTypeRepository
-                                                                    .save(notificationMapper.notificationTypeDtoToNotificationType(notificationTypeDto1)));
+                                                                    .save(notificationMapper.notificationTypeDtoToNotificationType(notificationTypeDto)));
 
     }
 
@@ -71,5 +75,43 @@ public class NotificationServiceImpl implements NotificationService {
                 .orElseThrow(()->new NotFoundException("Notification type doesn't exist")));
 
         return notificationTypeDto;
+    }
+
+    @Override
+    public Notification getRegisterNotification(UserDto userDto) {
+
+        Notification notification = new Notification();
+
+        NotificationType notificationType= notificationTypeRepository.findByName("Register").orElseThrow(()->new NotFoundException("Notfication type doesn't exist"));
+
+        notification.setDate(new Date());
+        notification.setNotificationType(notificationType);
+        notification.setUserID(userDto.getId());
+        notification.setEmail(userDto.getEmail());
+
+        String text = notificationType.getTemplate();
+
+        NotificationTypeDto notificationTypeDto = new NotificationTypeDto();
+        notificationTypeDto= notificationMapper.notificationTypeToNotificationTypeDto(notificationType);
+
+        List<ParameterDto> parameters = notificationTypeDto.getParameters();
+
+
+
+        for(ParameterDto p: parameters){
+            if(p.getName().equals("%name"))
+                p.setValue(userDto.getFirstName());
+            else if(p.getName().equals("%link"))
+                p.setValue("http://localhost:8083/users/user/confirm/"+userDto.getId());
+        }
+
+        for(ParameterDto p: parameters){
+            text = text.replace(p.getName(),p.getValue());
+        }
+
+
+        notification.setText(text+"\n Original Recepient: "+userDto.getEmail());
+
+        return notification;
     }
 }
