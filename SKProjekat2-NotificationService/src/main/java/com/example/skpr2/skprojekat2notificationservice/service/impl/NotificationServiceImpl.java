@@ -34,4 +34,29 @@ public class NotificationServiceImpl implements NotificationService {
 
         return notificationTypeRepository.findAll(pageable).map(notificationMapper::notificationTypeToNotificationTypeDto);
     }
+
+    @Override
+    public NotificationTypeDto addType(NotificationTypeDto notificationTypeDto) {
+
+        notificationTypeDto.getParameters().forEach(p->{
+            if(parameterRepository.findByName(p.getName()).isPresent()){
+
+            }else{
+                p.setId(null);
+                parameterRepository.save(notificationMapper.parameterDtoToParameter(p));
+            }
+        });
+
+        return notificationMapper.notificationTypeToNotificationTypeDto(notificationTypeRepository
+                                                                    .save(notificationMapper.notificationTypeDtoToNotificationType(notificationTypeDto)));
+
+    }
+
+    @Override
+    public NotificationTypeDto deleteType(NotificationTypeDto notificationTypeDto) {
+
+        notificationTypeRepository.delete(notificationMapper.notificationTypeDtoToNotificationType(notificationTypeDto));
+
+        return notificationTypeDto;
+    }
 }

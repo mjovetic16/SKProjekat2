@@ -10,4 +10,7 @@ public interface NotificationService {
 
     Page<NotificationTypeDto> findAll(Pageable pageable);
 
+    NotificationTypeDto addType(NotificationTypeDto notificationTypeDto);
+
+    NotificationTypeDto deleteType(NotificationTypeDto notificationTypeDto);
 }
