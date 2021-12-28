@@ -37,6 +37,10 @@ public class TestDataRunner implements CommandLineRunner {
         Role roleAdmin = new Role(RoleType.ROLE_ADMIN, "Admin role");
         Role roleManager = new Role(RoleType.ROLE_MANAGER, "Manager role");
 
+        roleClient.setId(1L);
+        roleAdmin.setId(2L);
+        roleManager.setId(3L);
+
         roleRepository.save(roleClient);
         roleRepository.save(roleAdmin);
         roleRepository.save(roleManager);
@@ -82,11 +86,23 @@ public class TestDataRunner implements CommandLineRunner {
         User admin = new User();
         admin.setRank(rank);
         admin.setEmail("admin@gmail.com");
+        admin.setFirstName("Admin");
         admin.setUsername("admin");
         admin.setPassword("admin");
         admin.setRole(roleAdmin);
         admin.setNumberOfReservations(7);
         userRepository.save(admin);
+
+        //Insert manager
+
+        User manager = new User();
+        manager.setRank(rank2);
+        manager.setEmail("manager@gmail.com");
+        manager.setUsername("manager");
+        manager.setPassword("manager");
+        manager.setRole(roleManager);
+        manager.setNumberOfReservations(7);
+        userRepository.save(manager);
 //        //User statuses
 //        userStatusRepository.save(new UserStatus(0, 5, 0));
 //        userStatusRepository.save(new UserStatus(6, 10, 10));

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
+import java.util.List;
 
 @Component
 public class RegisterListener {
@@ -31,8 +32,6 @@ public class RegisterListener {
         UserDto userDto = messageHelper.getMessage(message, UserDto.class);
 
         Notification notification = notificationService.getRegisterNotification(userDto);
-
-        //TODO notify manager
 
         emailService.sendSimpleMessage("mjovetic16@raf.rs", "Confirm Registration", notification.getText());
     }

@@ -1,50 +1,59 @@
 package com.example.skpr2.skprojekat2notificationservice.listener;
 
+import com.example.skpr2.skprojekat2notificationservice.domain.Notification;
 import com.example.skpr2.skprojekat2notificationservice.dto.ReservationUserDto;
 import com.example.skpr2.skprojekat2notificationservice.dto.UserDto;
 import com.example.skpr2.skprojekat2notificationservice.listener.helper.MessageHelper;
+import com.example.skpr2.skprojekat2notificationservice.service.NotificationService;
 import com.example.skpr2.skprojekat2notificationservice.service.impl.EmailService;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
+import java.util.List;
 
 @Component
 public class ReservationListener {
     private MessageHelper messageHelper;
     private EmailService emailService;
+    private NotificationService notificationService;
 
-    public ReservationListener(MessageHelper messageHelper, EmailService emailService) {
+    public ReservationListener(MessageHelper messageHelper, EmailService emailService, NotificationService notificationService) {
         this.messageHelper = messageHelper;
         this.emailService = emailService;
+        this.notificationService = notificationService;
     }
 
     @JmsListener(destination = "${destination.reservationNotify}", concurrency = "5-10")
     public void reservationNotify(Message message) throws JMSException {
 
         ReservationUserDto reservationUserDto = messageHelper.getMessage(message, ReservationUserDto.class);
-
         UserDto userDto = reservationUserDto.getUserDto();
 
-        String recepient = "mjovetic16@raf.rs";
-        String subject = "Confirm reservation";
-        String recepientOg = userDto.getEmail();
+        Notification notification = notificationService.getReservationNotification(reservationUserDto);
 
-        emailService.sendSimpleMessage(recepient, subject, reservationUserDto.toString()+"\n Recepient:"+recepientOg);
+        List<UserDto> managers = notificationService.getManagers();
+        managers.forEach(m->{
+            emailService.sendSimpleMessage("mjovetic16@raf.rs", "[Auto user notification] Confirm Reservation", "\nMessage:\n"+notification.getText()+ "\n\n User just received email\nRecepient: "+m.getEmail());
+        });
+
+        emailService.sendSimpleMessage("mjovetic16@raf.rs", "Confirm Reservation", notification.getText());
     }
 
     @JmsListener(destination = "${destination.cancelReservationNotify}", concurrency = "5-10")
     public void cancelReservationNotify(Message message) throws JMSException {
 
         ReservationUserDto reservationUserDto = messageHelper.getMessage(message, ReservationUserDto.class);
-
         UserDto userDto = reservationUserDto.getUserDto();
 
-        String recepient = "mjovetic16@raf.rs";
-        String subject = "Canceled reservation";
-        String recepientOg = userDto.getEmail();
+        Notification notification = notificationService.getCanceledReservationNotification(reservationUserDto);
 
-        emailService.sendSimpleMessage(recepient, subject, reservationUserDto.toString()+"\n Recepient:"+recepientOg);
+        List<UserDto> managers = notificationService.getManagers();
+        managers.forEach(m->{
+            emailService.sendSimpleMessage("mjovetic16@raf.rs", "[Auto user notification] Canceled Reservation", "\nMessage:\n"+notification.getText()+ "\n\n User just received email\nRecepient: "+m.getEmail());
+        });
+
+        emailService.sendSimpleMessage("mjovetic16@raf.rs", "Canceled Reservation", notification.getText());
     }
 }

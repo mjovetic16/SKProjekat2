@@ -69,7 +69,7 @@ public class TestDataRunner implements CommandLineRunner {
         NotificationType nRegister = new NotificationType();
         nRegister.setName("Register");
         nRegister.setId(1L);
-        nRegister.setTemplate("Hello %name,  please click the link to confirm your registration\n" +
+        nRegister.setTemplate("Hello %name, please click the link to confirm your registration\n" +
                 "%link");
         ArrayList <Parameter> nrParams = new ArrayList<>();
         nrParams.add(pName);
@@ -80,12 +80,12 @@ public class TestDataRunner implements CommandLineRunner {
         NotificationType nConfirm = new NotificationType();
         nConfirm.setName("Confirm Reservation");
         nConfirm.setId(2L);
-        nConfirm.setTemplate("Hello %name,  your reservation has been completed successfully.\n" +
+        nConfirm.setTemplate("Hello %name, your reservation has been completed successfully.\n" +
                 "\n" +
-                "%Date\n" +
-                "%Hotel\n" +
-                "%RoomType\n" +
-                "%Price ");
+                "Date: %date\n" +
+                "Hotel: %hotel\n" +
+                "Room Type: %roomType\n" +
+                "Price: %price $");
         ArrayList <Parameter> ncParams = new ArrayList<>();
         ncParams.add(pName);
         ncParams.add(pDate);
@@ -100,10 +100,10 @@ public class TestDataRunner implements CommandLineRunner {
         nCancel.setId(3L);
         nCancel.setTemplate("Hello %name, your reservation has been cancelled.\n" +
                 "\n" +
-                "%Date\n" +
-                "%Hotel\n" +
-                "%RoomType\n" +
-                "%Price");
+                "Date: %date\n" +
+                "Hotel: %hotel\n" +
+                "Room Type: %roomType\n");
+
         ArrayList <Parameter> nccPar = new ArrayList<>();
         nccPar.add(pName);
         nccPar.add(pDate);
@@ -117,7 +117,7 @@ public class TestDataRunner implements CommandLineRunner {
         NotificationType nReset = new NotificationType();
         nReset.setName("Reset Password");
         nReset.setId(4L);
-        nReset.setTemplate("Hello %name,  please click the link to reset your password\n" +
+        nReset.setTemplate("Hello %name, please click the link to reset your password\n" +
                 "%link");
         ArrayList <Parameter> nrrPar = new ArrayList<>();
         nrrPar.add(pName);
@@ -131,10 +131,10 @@ public class TestDataRunner implements CommandLineRunner {
         nRemind.setId(5L);
         nRemind.setTemplate("Hello %name, we want to remind you that your reservation is due in 2 days.\n" +
                 "\n" +
-                "%Date\n" +
-                "%Hotel\n" +
-                "%RoomType\n" +
-                "%Price");
+                "Date: %date\n" +
+                "Hotel: %hotel\n" +
+                "Room Type: %roomType\n" +
+                "Price: %price $");
         ArrayList <Parameter> nrrParams = new ArrayList<>();
         nrrParams.add(pName);
         nrrParams.add(pDate);

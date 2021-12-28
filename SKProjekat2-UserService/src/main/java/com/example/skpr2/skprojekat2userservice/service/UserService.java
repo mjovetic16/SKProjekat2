@@ -5,6 +5,8 @@ import com.example.skpr2.skprojekat2userservice.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface UserService {
 
     Page<UserDto> findAll(Pageable pageable);
@@ -30,4 +32,7 @@ public interface UserService {
     RankDto changeRank(RankDto rankDto);
 
     UserDto changeRes(int id, boolean addition);
+
+    ManagerContainerDto getAllManagers();
+
 }

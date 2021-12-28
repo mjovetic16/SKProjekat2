@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -100,5 +101,17 @@ public class UserController {
     public ResponseEntity<UserDto> changeRes(@RequestHeader("Authorization") String authorization, @PathVariable int id, @PathVariable boolean addition){
         return new ResponseEntity<>(userService.changeRes(id,addition),HttpStatus.OK);
     }
+
+    @ApiOperation(value="Get all managers")
+    @GetMapping("/manager/all")
+    public ResponseEntity<ManagerContainerDto> getAllManagers(){
+        return new ResponseEntity<>(userService.getAllManagers(),HttpStatus.OK);
+    }
+
+//    @ApiOperation(value="Change Password")
+//    @PostMapping("/manager/all")
+//    public ResponseEntity<List<UserDto>> getAllManagers(){
+//        return new ResponseEntity<>(userService.updateUser(userDto,authorization),HttpStatus.OK);
+//    }
 
 }

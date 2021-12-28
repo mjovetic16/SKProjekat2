@@ -1,9 +1,7 @@
 package com.example.skpr2.skprojekat2userservice.service.impl;
 
 
-import com.example.skpr2.skprojekat2userservice.domain.Blocked;
-import com.example.skpr2.skprojekat2userservice.domain.Rank;
-import com.example.skpr2.skprojekat2userservice.domain.User;
+import com.example.skpr2.skprojekat2userservice.domain.*;
 import com.example.skpr2.skprojekat2userservice.dto.*;
 import com.example.skpr2.skprojekat2userservice.exception.BlockedException;
 import com.example.skpr2.skprojekat2userservice.exception.NotFoundException;
@@ -26,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -207,9 +206,19 @@ public class UserServiceImpl implements UserService {
         return userMapper.userToUserDto(userRepository.save(user));
     }
 
+    @Override
+    public ManagerContainerDto getAllManagers() {
+        Role roleManager = new Role(RoleType.ROLE_MANAGER, "Manager role");
+        roleManager.setId(3L);
+        List<User> users = userRepository.findAllByRole(roleManager).orElseThrow(()->new NotFoundException("No users with role"));
+        ManagerContainerDto m = new ManagerContainerDto();
+
+        m.setManagers(users.stream().map(userMapper::userToUserDto).collect(Collectors.toList()));
+        return m;
+    }
+
     public void registerNotify(UserDto userDto){
         jmsTemplate.convertAndSend(registerDestination, messageHelper.createTextMessage(userDto));
-
     }
 
     //
