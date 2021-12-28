@@ -37,6 +37,8 @@ public class NotificationMapper {
         notification.setId(notificationDto.getId());
         notification.setEmail(notificationDto.getEmail());
         notification.setText(notificationDto.getText());
+        notification.setUserID(notificationDto.getUserID());
+        notification.setDate(notificationDto.getDate());
 
         return notification;
     }
@@ -47,7 +49,9 @@ public class NotificationMapper {
         notificationDto.setNotificationType(notificationTypeToNotificationTypeDto(notification.getNotificationType()));
         notificationDto.setId(notification.getId());
         notificationDto.setEmail(notification.getEmail());
-        notification.setText(notification.getText());
+        notificationDto.setText(notification.getText());
+        notificationDto.setUserID(notification.getUserID());
+        notificationDto.setDate(notification.getDate());
 
         return notificationDto;
 
@@ -58,6 +62,7 @@ public class NotificationMapper {
 
         notificationType.setId(notificationTypeDto.getId());
         notificationType.setTemplate(notificationTypeDto.getTemplate());
+        notificationType.setName(notificationTypeDto.getName());
 
         ArrayList<Parameter> parameters = new ArrayList<Parameter>();
 
@@ -74,6 +79,7 @@ public class NotificationMapper {
 
         notificationTypeDto.setId(notificationType.getId());
         notificationTypeDto.setTemplate(notificationType.getTemplate());
+        notificationTypeDto.setName(notificationType.getName());
 
         ArrayList<Parameter> parameters = new ArrayList<Parameter>();
 

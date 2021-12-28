@@ -12,11 +12,21 @@ public class NotificationType {
 
     private String template;
 
-    @OneToMany
+    private String name;
+
+    @ManyToMany
     private List<Parameter> parameters;
 
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setId(Long id) {

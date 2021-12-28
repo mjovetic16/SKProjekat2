@@ -1,6 +1,7 @@
 package com.example.skpr2.skprojekat2notificationservice.domain;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -16,6 +17,26 @@ public class Notification {
     private String email;
 
     private String text;
+
+    private Long userID;
+
+    private Date date;
+
+    public Long getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Long userID) {
+        this.userID = userID;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public String getText() {
         return text;
