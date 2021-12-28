@@ -1,4 +1,4 @@
-package com.example.skpr2.skprojekat2notificationservice.service;
+package com.example.skpr2.skprojekat2notificationservice.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

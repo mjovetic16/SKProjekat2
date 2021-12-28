@@ -1,7 +1,7 @@
 package com.example.skpr2.skprojekat2notificationservice.listener;
 
 import com.example.skpr2.skprojekat2notificationservice.listener.helper.MessageHelper;
-import com.example.skpr2.skprojekat2notificationservice.service.EmailService;
+import com.example.skpr2.skprojekat2notificationservice.service.impl.EmailService;
 
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
