@@ -1,7 +1,10 @@
 package com.example.skpr2.skprojekat2notificationservice.service.impl;
 
 import com.example.skpr2.skprojekat2notificationservice.domain.Notification;
+import com.example.skpr2.skprojekat2notificationservice.domain.Parameter;
 import com.example.skpr2.skprojekat2notificationservice.dto.NotificationTypeDto;
+import com.example.skpr2.skprojekat2notificationservice.dto.ParameterDto;
+import com.example.skpr2.skprojekat2notificationservice.exception.NotFoundException;
 import com.example.skpr2.skprojekat2notificationservice.mapper.NotificationMapper;
 import com.example.skpr2.skprojekat2notificationservice.repository.NotificationRepository;
 import com.example.skpr2.skprojekat2notificationservice.repository.NotificationTypeRepository;
@@ -10,6 +13,9 @@ import com.example.skpr2.skprojekat2notificationservice.service.NotificationServ
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -38,24 +44,31 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public NotificationTypeDto addType(NotificationTypeDto notificationTypeDto) {
 
-        notificationTypeDto.getParameters().forEach(p->{
-            if(parameterRepository.findByName(p.getName()).isPresent()){
+        NotificationTypeDto notificationTypeDto1 = notificationTypeDto;
+        ArrayList<Parameter> parameters = new ArrayList<>();
 
+        for(ParameterDto p:notificationTypeDto.getParameters()){
+            if(parameterRepository.findByName(p.getName()).isPresent()){
+                parameters.add(notificationMapper.parameterDtoToParameter(p));
             }else{
                 p.setId(null);
-                parameterRepository.save(notificationMapper.parameterDtoToParameter(p));
+                parameters.add(parameterRepository.save(notificationMapper.parameterDtoToParameter(p)));
             }
-        });
+        }
+        notificationTypeDto1.setParameters(parameters.stream().map(notificationMapper::parameterToParameterDto).collect(Collectors.toList()));
+
+
 
         return notificationMapper.notificationTypeToNotificationTypeDto(notificationTypeRepository
-                                                                    .save(notificationMapper.notificationTypeDtoToNotificationType(notificationTypeDto)));
+                                                                    .save(notificationMapper.notificationTypeDtoToNotificationType(notificationTypeDto1)));
 
     }
 
     @Override
     public NotificationTypeDto deleteType(NotificationTypeDto notificationTypeDto) {
 
-        notificationTypeRepository.delete(notificationMapper.notificationTypeDtoToNotificationType(notificationTypeDto));
+        notificationTypeRepository.delete(notificationTypeRepository.findById(notificationTypeDto.getId())
+                .orElseThrow(()->new NotFoundException("Notification type doesn't exist")));
 
         return notificationTypeDto;
     }
