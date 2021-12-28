@@ -2,6 +2,8 @@ package com.example.skpr2.skprojekat2notificationservice.controller;
 
 import com.example.skpr2.skprojekat2notificationservice.domain.Notification;
 import com.example.skpr2.skprojekat2notificationservice.domain.NotificationType;
+import com.example.skpr2.skprojekat2notificationservice.dto.FilterDto;
+import com.example.skpr2.skprojekat2notificationservice.dto.NotificationDto;
 import com.example.skpr2.skprojekat2notificationservice.dto.NotificationTypeDto;
 import com.example.skpr2.skprojekat2notificationservice.security.CheckSecurity;
 import com.example.skpr2.skprojekat2notificationservice.service.NotificationService;
@@ -52,8 +54,15 @@ public class NotificationController {
                                                                             @RequestBody NotificationTypeDto notificationTypeDto) {
 
         return new ResponseEntity<>(notificationService.deleteType(notificationTypeDto), HttpStatus.OK);
+    }
 
+    @ApiOperation(value = "Get all notifications")
+    @PostMapping
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
+    public ResponseEntity<Page<NotificationDto>> getAllNotifications(@RequestHeader("Authorization") String authorization,
+                                                                     @RequestBody FilterDto filterDto, Pageable pageable) {
 
+        return new ResponseEntity<>(notificationService.getAllNotificationsFitlered(authorization, filterDto, pageable), HttpStatus.OK);
     }
 
 

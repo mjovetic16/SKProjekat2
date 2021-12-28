@@ -35,4 +35,5 @@ public interface UserService {
 
     ManagerContainerDto getAllManagers();
 
+    UserDto resetPassword(UserDto userDto, String authorization);
 }

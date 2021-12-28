@@ -245,4 +245,50 @@ public class NotificationServiceImpl implements NotificationService {
 
         return managerContainerDto.getManagers();
     }
+
+    @Override
+    public Page<NotificationDto> getAllNotificationsFitlered(String authorization, FilterDto filterDto, Pageable pageable) {
+        //TODO implement notification filtering
+        return null;
+    }
+
+    @Override
+    public Notification getResetNotification(UserDto userDto) {
+        Notification notification = new Notification();
+
+        NotificationType notificationType= notificationTypeRepository.findByName("Reset").orElseThrow(()->new NotFoundException("Notfication type doesn't exist"));
+
+        notification.setDate(new Date());
+        notification.setNotificationType(notificationType);
+        notification.setUserID(userDto.getId());
+        notification.setEmail(userDto.getEmail());
+
+        String text = notificationType.getTemplate();
+
+        NotificationTypeDto notificationTypeDto = new NotificationTypeDto();
+        notificationTypeDto= notificationMapper.notificationTypeToNotificationTypeDto(notificationType);
+
+        List<ParameterDto> parameters = notificationTypeDto.getParameters();
+
+
+
+        for(ParameterDto p: parameters){
+            if(p.getName().equals("%name"))
+                p.setValue(userDto.getFirstName());
+            else if(p.getName().equals("%pass"))
+                p.setValue("kDbjsdg12534");
+        }
+
+        for(ParameterDto p: parameters){
+            System.out.println(p);
+            text = text.replace(p.getName(),p.getValue());
+        }
+
+
+        notification.setText(text+"\n\n Original Recepient: "+userDto.getEmail());
+
+        notificationRepository.save(notification);
+
+        return notification;
+    }
 }

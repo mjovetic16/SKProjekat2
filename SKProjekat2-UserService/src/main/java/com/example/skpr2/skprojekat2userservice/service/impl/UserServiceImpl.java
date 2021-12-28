@@ -38,9 +38,11 @@ public class UserServiceImpl implements UserService {
     private JmsTemplate jmsTemplate;
     private MessageHelper messageHelper;
     private String registerDestination;
+    private String resetPasswordDestination;
 
     public UserServiceImpl(UserRepository userRepository, TokenService tokenService, UserMapper userMapper, BlockedRepository blockedRepository,
-                           RankRepository rankRepository, JmsTemplate jmsTemplate, MessageHelper messageHelper, @Value("${destination.registerNotify}") String registerDestination) {
+                           RankRepository rankRepository, JmsTemplate jmsTemplate, MessageHelper messageHelper, @Value("${destination.registerNotify}") String registerDestination,
+                           @Value("${destination.resetPassword}") String resetPasswordDestination  ) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
         this.userMapper = userMapper;
@@ -49,6 +51,7 @@ public class UserServiceImpl implements UserService {
         this.jmsTemplate = jmsTemplate;
         this.messageHelper = messageHelper;
         this.registerDestination = registerDestination;
+        this.resetPasswordDestination = resetPasswordDestination;
     }
 
     @Override
@@ -215,6 +218,20 @@ public class UserServiceImpl implements UserService {
 
         m.setManagers(users.stream().map(userMapper::userToUserDto).collect(Collectors.toList()));
         return m;
+    }
+
+    @Override
+    public UserDto resetPassword(UserDto userDto, String authorization) {
+
+
+        User newUser = userRepository.findUserById(userDto.getId()).orElseThrow(()->new NotFoundException("User ne postoji"));
+
+        newUser.setPassword("kDbjsdg12534");
+        userRepository.save(newUser);
+
+        jmsTemplate.convertAndSend(resetPasswordDestination, messageHelper.createTextMessage(userMapper.userToUserDto(newUser)));
+
+        return userMapper.userToUserDto(newUser);
     }
 
     public void registerNotify(UserDto userDto){

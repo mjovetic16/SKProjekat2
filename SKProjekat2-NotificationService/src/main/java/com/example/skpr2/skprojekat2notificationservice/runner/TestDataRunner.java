@@ -43,6 +43,7 @@ public class TestDataRunner implements CommandLineRunner {
         Parameter pHotel = new Parameter();
         Parameter pRoomType = new Parameter();
         Parameter pPrice = new Parameter();
+        Parameter pPass = new Parameter();
 
         pName.setName("%name");
         pLink.setName("%link");
@@ -50,6 +51,7 @@ public class TestDataRunner implements CommandLineRunner {
         pHotel.setName("%hotel");
         pRoomType.setName("%roomType");
         pPrice.setName("%price");
+        pPass.setName("%pass");
 
         pName.setId(1L);
         pLink.setId(2L);
@@ -57,6 +59,7 @@ public class TestDataRunner implements CommandLineRunner {
         pHotel.setId(4L);
         pRoomType.setId(5L);
         pPrice.setId(6L);
+        pPass.setId(7L);
 
         parameterRepository.save(pName);
         parameterRepository.save(pLink);
@@ -64,6 +67,7 @@ public class TestDataRunner implements CommandLineRunner {
         parameterRepository.save(pHotel);
         parameterRepository.save(pRoomType);
         parameterRepository.save(pPrice);
+        parameterRepository.save(pPass);
 
         //Dodavanje tipova notifikacija u bazu
         NotificationType nRegister = new NotificationType();
@@ -115,13 +119,13 @@ public class TestDataRunner implements CommandLineRunner {
 
 
         NotificationType nReset = new NotificationType();
-        nReset.setName("Reset Password");
+        nReset.setName("Reset");
         nReset.setId(4L);
-        nReset.setTemplate("Hello %name, please click the link to reset your password\n" +
-                "%link");
+        nReset.setTemplate("Hello %name, your temporary password is now:\n" +
+                "%pass"+"\n Please update your password after logging in");
         ArrayList <Parameter> nrrPar = new ArrayList<>();
         nrrPar.add(pName);
-        nrrPar.add(pLink);
+        nrrPar.add(pPass);
         nReset.setParameters(nrrPar);
         //
 

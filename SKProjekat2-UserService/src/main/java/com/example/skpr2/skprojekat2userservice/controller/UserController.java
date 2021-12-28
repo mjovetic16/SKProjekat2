@@ -2,6 +2,7 @@ package com.example.skpr2.skprojekat2userservice.controller;
 
 
 import com.example.skpr2.skprojekat2userservice.domain.Blocked;
+import com.example.skpr2.skprojekat2userservice.domain.User;
 import com.example.skpr2.skprojekat2userservice.dto.*;
 import com.example.skpr2.skprojekat2userservice.security.CheckSecurity;
 import com.example.skpr2.skprojekat2userservice.service.UserService;
@@ -108,10 +109,10 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllManagers(),HttpStatus.OK);
     }
 
-//    @ApiOperation(value="Change Password")
-//    @PostMapping("/manager/all")
-//    public ResponseEntity<List<UserDto>> getAllManagers(){
-//        return new ResponseEntity<>(userService.updateUser(userDto,authorization),HttpStatus.OK);
-//    }
+    @ApiOperation(value="Reset Password")
+    @PostMapping("/reset")
+    public ResponseEntity<UserDto> resetPassword(@RequestHeader("Authorization") String authorization, @RequestBody UserDto userDto){
+        return new ResponseEntity<>(userService.resetPassword(userDto,authorization),HttpStatus.OK);
+    }
 
 }
