@@ -36,12 +36,16 @@ public class ReservationListener {
 
         List<UserDto> managers = notificationService.getManagers();
         managers.forEach(m->{
-            Notification n = notification;
-            n.setText("\nMessage:\n"+notification.getText()+ "\n\n User just received email\nRecepient: "+m.getEmail());
-            emailService.sendSimpleMessage("mjovetic16@raf.rs", "[Auto user notification] Confirm Reservation", "\nMessage:\n"+notification.getText()+ "\n\n User just received email\nRecepient: "+m.getEmail());
+            Notification n = new Notification();
+            n.setDate(notification.getDate());
+            n.setNotificationType(notification.getNotificationType());
+            n.setText("\nMessage:\n"+notification.getText()+ "\nRecepient: "+m.getEmail());
             n.setEmail(m.getEmail());
             n.setUserID(m.getId());
             n.setId(null);
+
+            emailService.sendSimpleMessage("mjovetic16@raf.rs", "[Auto user notification] Confirm Reservation", "\nMessage:\n"+notification.getText()+ "\n\n User just received email\nRecepient: "+m.getEmail());
+
             notificationService.saveNotification(n);
         });
 
@@ -58,18 +62,49 @@ public class ReservationListener {
 
         List<UserDto> managers = notificationService.getManagers();
         managers.forEach(m->{
-            Notification n = notification;
-            n.setText("\nMessage:\n"+notification.getText()+ "\n\n User just received email\nRecepient: "+m.getEmail());
-
-            emailService.sendSimpleMessage("mjovetic16@raf.rs", "[Auto user notification] Canceled Reservation", "\nMessage:\n"+notification.getText()+ "\n\n User just received email\nRecepient: "+m.getEmail());
-
+            Notification n = new Notification();
+            n.setDate(notification.getDate());
+            n.setNotificationType(notification.getNotificationType());
+            n.setText("\nMessage:\n"+notification.getText()+ "\nRecepient: "+m.getEmail());
             n.setEmail(m.getEmail());
             n.setUserID(m.getId());
             n.setId(null);
+
+
+            emailService.sendSimpleMessage("mjovetic16@raf.rs", "[Auto user notification] Canceled Reservation", "\nMessage:\n"+notification.getText()+ "\n\n User just received email\nRecepient: "+m.getEmail());
+
+
             notificationService.saveNotification(n);
 
         });
 
         emailService.sendSimpleMessage("mjovetic16@raf.rs", "Canceled Reservation", notification.getText());
+    }
+
+    @JmsListener(destination = "${destination.reminderNotify}",concurrency = "5-10")
+    public void remindNotify(Message message) throws JMSException{
+        ReservationUserDto reservationUserDto = messageHelper.getMessage(message, ReservationUserDto.class);
+        UserDto userDto = reservationUserDto.getUserDto();
+
+        Notification notification = notificationService.getReminderNotification(reservationUserDto);
+
+        List<UserDto> managers = notificationService.getManagers();
+        managers.forEach(m->{
+
+            Notification n = new Notification();
+            n.setDate(notification.getDate());
+            n.setNotificationType(notification.getNotificationType());
+            n.setText("\nMessage:\n"+notification.getText()+ "\nRecepient: "+m.getEmail());
+            n.setEmail(m.getEmail());
+            n.setUserID(m.getId());
+            n.setId(null);
+
+            emailService.sendSimpleMessage("mjovetic16@raf.rs", "[Auto user notification] Reservation Reminder", "\nMessage:\n"+notification.getText()+ "\n\n User just received email\nRecepient: "+m.getEmail());
+
+            notificationService.saveNotification(n);
+
+        });
+
+        emailService.sendSimpleMessage("mjovetic16@raf.rs", "Reservation Reminder", notification.getText());
     }
 }

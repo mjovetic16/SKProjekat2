@@ -29,6 +29,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,12 +55,15 @@ public class ReservationServiceImpl implements ReservationService {
 
     private String cancelReservationDest;
 
+    private String reminderDestination;
+
 
 
     public ReservationServiceImpl(ReservationMapper reservationMapper, ReservationRepository reservationRepository,
                                   TerminRepository terminRepository, TokenService tokenService, JmsTemplate jmsTemplate,
                                   MessageHelper messageHelper, @Value("${destination.reservationNotify}")String reservationDest,
-                                  @Value("${destination.cancelReservationNotify}")String cancelReservationDest) {
+                                  @Value("${destination.cancelReservationNotify}")String cancelReservationDest,
+                                  @Value("${destination.reminderNotify}") String reminderDestination) {
 
         this.reservationMapper = reservationMapper;
 
@@ -75,6 +80,8 @@ public class ReservationServiceImpl implements ReservationService {
         this.reservationDest = reservationDest;
 
         this.cancelReservationDest = cancelReservationDest;
+
+        this.reminderDestination = reminderDestination;
 
     }
 
@@ -162,6 +169,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setUserID(userDto.getId());
         reservation.setTermin(reservationMapper.terminDtoToTermin(terminDto));
         reservation.setPrice(price);
+        reservation.setNotified(false);
 
         System.out.println("The price is: "+reservation.getPrice());
 
@@ -239,6 +247,27 @@ public class ReservationServiceImpl implements ReservationService {
 
         return reservationDtoEmpty;
     }
+
+    @Override
+    public void remindReservation() {
+        Date myDate = Date.from(Instant.now().minus(2, ChronoUnit.DAYS));
+        reservationRepository.findAllByNotifiedAndTerminDayGreaterThan(false,myDate)
+                .forEach(reservation->{
+
+                    reservation.setNotified(true);
+                    reservationRepository.save(reservation);
+
+
+                    ReservationDto reservationDto = reservationMapper.reservationToReservationDto(reservation);
+
+                    ReservationUserDto reservationUserDto = reservationMapper.reservationUserDtoFromReservationDto(reservationDto);
+
+
+                    jmsTemplate.convertAndSend(reminderDestination,messageHelper.createTextMessage(reservationUserDto));
+
+                });
+    }
+
 
 
     //

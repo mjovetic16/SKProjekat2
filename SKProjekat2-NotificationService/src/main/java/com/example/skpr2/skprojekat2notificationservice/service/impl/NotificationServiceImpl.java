@@ -365,4 +365,63 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationMapper.notificationToNotificationDto(notificationRepository.save(notification));
 
     }
+
+    @Override
+    public Notification getReminderNotification(ReservationUserDto reservationUserDto) {
+        Notification notification = new Notification();
+
+        NotificationType notificationType= notificationTypeRepository.findByName("Reservation Reminder").orElseThrow(()->new NotFoundException("Notification type doesn't exist"));
+
+        System.out.println(reservationUserDto);
+
+        UserDto userDto = reservationUserDto.getUserDto();
+
+        notification.setDate(new Date());
+        notification.setNotificationType(notificationType);
+        notification.setUserID(userDto.getId());
+        notification.setEmail(userDto.getEmail());
+
+        String text = notificationType.getTemplate();
+
+        NotificationTypeDto notificationTypeDto = new NotificationTypeDto();
+        notificationTypeDto = notificationMapper.notificationTypeToNotificationTypeDto(notificationType);
+
+        List<ParameterDto> parameters = notificationTypeDto.getParameters();
+
+        System.out.println(userDto);
+
+        for(ParameterDto p: parameters){
+            switch (p.getName()) {
+                case "%name":
+                    p.setValue(userDto.getFirstName());
+                    break;
+                case "%date":
+                    p.setValue(reservationUserDto.getTerminDto().getDay().toString());
+                    break;
+                case "%hotel":
+                    p.setValue(reservationUserDto.getTerminDto().getHotel().getName());
+                    break;
+                case "%roomType":
+                    p.setValue(reservationUserDto.getTerminDto().getAccommodationDto().getRoomType().getName());
+                    break;
+                case "%price":
+                    p.setValue(String.valueOf(reservationUserDto.getPrice()));
+                    break;
+            }
+            System.out.println(p);
+        }
+
+        for(ParameterDto p: parameters){
+            System.out.println(text);
+            System.out.println(p);
+            text = text.replace(p.getName(),p.getValue());
+        }
+
+
+        notification.setText(text+"\n\n Original Recepient: "+userDto.getEmail());
+
+        notificationRepository.save(notification);
+
+        return notification;
+    }
 }

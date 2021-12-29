@@ -20,4 +20,7 @@ public interface ReservationService {
     ReservationDto reserve(String authorization, TerminDto terminDto);
 
     ReservationDto cancelReservation(String authorization, ReservationDto reservationDto);
+
+    void remindReservation();
+
 }

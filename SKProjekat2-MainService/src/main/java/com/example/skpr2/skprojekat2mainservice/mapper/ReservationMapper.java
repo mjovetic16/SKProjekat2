@@ -11,6 +11,8 @@ import com.example.skpr2.skprojekat2mainservice.exception.NotFoundException;
 import com.example.skpr2.skprojekat2mainservice.repository.AccommodationRepository;
 import com.example.skpr2.skprojekat2mainservice.repository.HotelRepository;
 import com.example.skpr2.skprojekat2mainservice.repository.RoomTypeRepository;
+import com.example.skpr2.skprojekat2mainservice.service.ReservationService;
+import com.example.skpr2.skprojekat2mainservice.service.UserService;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,19 +22,21 @@ import java.util.stream.Collectors;
 public class ReservationMapper {
 
     private HotelRepository hotelRepository;
+    private UserService userService;
     private AccommodationRepository accommodationRepository;
     private RoomTypeRepository roomTypeRepository;
     private RoomMapper roomMapper;
     private HotelMapper hotelMapper;
 
     public ReservationMapper(HotelRepository hotelRepository, AccommodationRepository accommodationRepository, RoomMapper roomMapper,
-                             RoomTypeRepository roomTypeRepository, HotelMapper hotelMapper) {
+                             RoomTypeRepository roomTypeRepository, HotelMapper hotelMapper, UserService userService) {
 
         this.hotelRepository = hotelRepository;
         this.accommodationRepository = accommodationRepository;
         this.roomMapper = roomMapper;
         this.hotelMapper = hotelMapper;
         this.roomTypeRepository = roomTypeRepository;
+        this.userService = userService;
 
 
     }
@@ -44,6 +48,7 @@ public class ReservationMapper {
         reservationDto.setId(reservation.getId());
         reservationDto.setTerminDto(terminToTerminDto(reservation.getTermin()));
         reservationDto.setPrice(reservation.getPrice());
+        reservationDto.setNotified(reservation.isNotified());
 
         return reservationDto;
     }
@@ -55,6 +60,7 @@ public class ReservationMapper {
         reservation.setUserID(reservationDto.getUserID());
         reservation.setTermin(terminDtoToTermin(reservationDto.getTerminDto()));
         reservation.setPrice(reservationDto.getPrice());
+        reservation.setNotified(reservationDto.isNotified());
 
         return reservation;
     }
@@ -116,6 +122,7 @@ public class ReservationMapper {
         reservationUserDto.setId(reservationDto.getId());
         reservationUserDto.setTerminDto(reservationDto.getTerminDto());
         reservationUserDto.setPrice(reservationDto.getPrice());
+        reservationUserDto.setUserDto(userService.getUser(reservationDto.getUserID()));
 
         return reservationUserDto;
 

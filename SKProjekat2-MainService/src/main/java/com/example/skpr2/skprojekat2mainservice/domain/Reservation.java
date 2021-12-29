@@ -15,8 +15,19 @@ public class Reservation {
 
     private float price;
 
+    private boolean notified;
+
     @ManyToOne
     private Termin termin;
+
+
+    public boolean isNotified() {
+        return notified;
+    }
+
+    public void setNotified(boolean notified) {
+        this.notified = notified;
+    }
 
     public float getPrice() {
         return price;

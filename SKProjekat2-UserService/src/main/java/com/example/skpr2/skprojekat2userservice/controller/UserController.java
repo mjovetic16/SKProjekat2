@@ -91,8 +91,7 @@ public class UserController {
 
     @ApiOperation(value="Get user by ID")
     @GetMapping("/{id}")
-    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
-    public ResponseEntity<UserDto> getUser(@RequestHeader("Authorization") String authorization, @PathVariable int id){
+    public ResponseEntity<UserDto> getUser(@PathVariable int id){
         return new ResponseEntity<>(userService.getUser(id),HttpStatus.OK);
     }
 

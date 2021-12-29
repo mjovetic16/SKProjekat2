@@ -31,4 +31,6 @@ public interface NotificationService {
     Notification getResetNotification(UserDto userDto);
 
     NotificationDto saveNotification(Notification notification);
+
+    Notification getReminderNotification(ReservationUserDto reservationUserDto);
 }
