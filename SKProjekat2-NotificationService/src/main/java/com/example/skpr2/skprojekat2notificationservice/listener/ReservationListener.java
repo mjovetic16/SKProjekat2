@@ -19,6 +19,7 @@ public class ReservationListener {
     private EmailService emailService;
     private NotificationService notificationService;
 
+
     public ReservationListener(MessageHelper messageHelper, EmailService emailService, NotificationService notificationService) {
         this.messageHelper = messageHelper;
         this.emailService = emailService;
@@ -35,7 +36,13 @@ public class ReservationListener {
 
         List<UserDto> managers = notificationService.getManagers();
         managers.forEach(m->{
+            Notification n = notification;
+            n.setText("\nMessage:\n"+notification.getText()+ "\n\n User just received email\nRecepient: "+m.getEmail());
             emailService.sendSimpleMessage("mjovetic16@raf.rs", "[Auto user notification] Confirm Reservation", "\nMessage:\n"+notification.getText()+ "\n\n User just received email\nRecepient: "+m.getEmail());
+            n.setEmail(m.getEmail());
+            n.setUserID(m.getId());
+            n.setId(null);
+            notificationService.saveNotification(n);
         });
 
         emailService.sendSimpleMessage("mjovetic16@raf.rs", "Confirm Reservation", notification.getText());
@@ -51,7 +58,16 @@ public class ReservationListener {
 
         List<UserDto> managers = notificationService.getManagers();
         managers.forEach(m->{
+            Notification n = notification;
+            n.setText("\nMessage:\n"+notification.getText()+ "\n\n User just received email\nRecepient: "+m.getEmail());
+
             emailService.sendSimpleMessage("mjovetic16@raf.rs", "[Auto user notification] Canceled Reservation", "\nMessage:\n"+notification.getText()+ "\n\n User just received email\nRecepient: "+m.getEmail());
+
+            n.setEmail(m.getEmail());
+            n.setUserID(m.getId());
+            n.setId(null);
+            notificationService.saveNotification(n);
+
         });
 
         emailService.sendSimpleMessage("mjovetic16@raf.rs", "Canceled Reservation", notification.getText());

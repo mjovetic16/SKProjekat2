@@ -24,5 +24,6 @@ public class EmailListener {
     public void addOrder(Message message) throws JMSException {
         //MatchesDto matchesDto = messageHelper.getMessage(message, MatchesDto.class);
         //emailService.sendSimpleMessage("mjovetic16@raf.rs", "subject", matchesDto.toString());
+        //TODO implement scheduled message
     }
 }

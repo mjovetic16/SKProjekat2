@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+
 @RestController
 @RequestMapping("/notification")
 public class NotificationController {
@@ -60,7 +62,7 @@ public class NotificationController {
     @PostMapping
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
     public ResponseEntity<Page<NotificationDto>> getAllNotifications(@RequestHeader("Authorization") String authorization,
-                                                                     @RequestBody FilterDto filterDto, Pageable pageable) {
+                                                                     @RequestBody FilterDto filterDto, Pageable pageable) throws ParseException {
 
         return new ResponseEntity<>(notificationService.getAllNotificationsFitlered(authorization, filterDto, pageable), HttpStatus.OK);
     }

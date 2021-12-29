@@ -2,28 +2,28 @@ package com.example.skpr2.skprojekat2notificationservice.dto;
 
 public class FilterDto {
 
-    private String city;
+    private String name;
 
-    private String hotel;
+    private String email;
 
     private String startDate;
 
     private String endDate;
 
-    public String getCity() {
-        return city;
+    public String getName() {
+        return name;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getHotel() {
-        return hotel;
+    public String getEmail() {
+        return email;
     }
 
-    public void setHotel(String hotel) {
-        this.hotel = hotel;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getStartDate() {
