@@ -249,6 +249,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional
     public void remindReservation() {
         Date myDate = Date.from(Instant.now().minus(2, ChronoUnit.DAYS));
         reservationRepository.findAllByNotifiedAndTerminDayGreaterThan(false,myDate)
