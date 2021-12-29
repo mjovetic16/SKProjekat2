@@ -302,10 +302,17 @@ public class NotificationServiceImpl implements NotificationService {
 
             return notificationRepository.findByEmailContainsAndNotificationTypeNameContainsAndDateGreaterThanAndDateLessThan(pageable,email,name,startDate,endDate)
                     .map(notificationMapper::notificationToNotificationDto);
+
         }else if(role.equals(RoleType.ROLE_MANAGER.toString())){
 
             return notificationRepository.findByEmailContainsAndNotificationTypeNameContainsAndDateGreaterThanAndDateLessThanAndUserIDEquals(pageable,email,name,startDate,endDate,id)
                     .map(notificationMapper::notificationToNotificationDto);
+
+        }else if(role.equals(RoleType.ROLE_CLIENT.toString())){
+
+            return notificationRepository.findByEmailContainsAndNotificationTypeNameContainsAndDateGreaterThanAndDateLessThanAndUserIDEquals(pageable,email,name,startDate,endDate,id)
+                    .map(notificationMapper::notificationToNotificationDto);
+
         }
 
         return null;

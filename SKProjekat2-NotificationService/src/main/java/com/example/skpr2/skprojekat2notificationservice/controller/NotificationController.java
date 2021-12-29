@@ -60,7 +60,7 @@ public class NotificationController {
 
     @ApiOperation(value = "Get all notifications")
     @PostMapping
-    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
     public ResponseEntity<Page<NotificationDto>> getAllNotifications(@RequestHeader("Authorization") String authorization,
                                                                      @RequestBody FilterDto filterDto, Pageable pageable) throws ParseException {
 
