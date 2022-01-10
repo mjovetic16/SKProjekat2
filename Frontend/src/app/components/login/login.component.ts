@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/services/login/login.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import jwt_decode from 'jwt-decode';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       // Odgovarajuce HTML elemente cemo povezati atributom formControlName="..."
       // ['default value', [validators]
-      username: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(4)]]
     })
   }
@@ -31,8 +32,8 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public get username(){
-    return this.loginForm.get('username')
+  public get email(){
+    return this.loginForm.get('email')
   }
 
   public get password(){
@@ -42,24 +43,35 @@ export class LoginComponent implements OnInit {
   public submitForm(credentials){
     this.loginService.login(credentials).subscribe(resp => {
       let auth = resp.headers.get("Authorization");
-      console.log(auth);
+      let token = resp.body["token"];
+
+      console.log(token);
       
 
-      localStorage.setItem("jwt", auth);
+      localStorage.setItem("jwt", token);
+
+      let parsedToken = jwt_decode(token);
+
+      console.log(parsedToken);
       
-      this.loginService.getUser(credentials).subscribe(resp => {
+      
+      
+      this.loginService.getUser(parsedToken["id"]).subscribe(resp => {
         console.log(resp);
         localStorage.setItem("user", JSON.stringify(resp));
         console.log(localStorage.getItem("user"));
         this.router.navigate(['/home'])
         
       })
+
+      
+      
       
     },error => {
       console.log(error);
       
        this.showAlert=true;
-       this.alertContent = "Username or password are incorrect"; 
+       this.alertContent = "Email or password are incorrect"; 
       
     
     })

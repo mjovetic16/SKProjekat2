@@ -95,6 +95,7 @@ public class UserController {
         return new ResponseEntity<>(userService.getUser(id),HttpStatus.OK);
     }
 
+
     @ApiOperation(value="Change Res Number")
     @PostMapping("/reservation/{id}/{addition}")
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})

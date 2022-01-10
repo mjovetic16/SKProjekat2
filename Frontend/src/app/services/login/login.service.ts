@@ -9,8 +9,7 @@ import { map } from 'rxjs/operators'
 })
 export class LoginService implements OnDestroy {
 
-  private readonly loginUrl = 'http://localhost:8080/login'
-  private readonly userUrl = "http://localhost:8080/users"
+  private readonly userUrl = "http://localhost:8083/users"
 
   constructor(private http: HttpClient) { }
 
@@ -20,27 +19,21 @@ export class LoginService implements OnDestroy {
 
   login(credentials) {
 
-    let user = {username: credentials.username, password:credentials.password};
+    let user = {email: credentials.email, password:credentials.password};
 
-    return this.http.post(this.loginUrl,user,{observe:'response'});
+    return this.http.post(this.userUrl+"/user/login",user,{observe:'response'});
     
     
   }
 
-  getUser(credentials){
+  getUser(id){
 
     let headers = new HttpHeaders();
-    headers = headers.set('Authorization', localStorage.getItem('jwt'));
+    headers = headers.set('Authorization', localStorage.getItem('jwt')); 
 
-     return this.http.get(this.userUrl+"/"+credentials.username,{headers:headers});
+    return this.http.get(this.userUrl+"/user/"+id,{headers:headers});
   }
 
-
-  
-
-  postExample(data){
-    this.http.post(this.loginUrl, data)
-  }
 
   logout(){
     localStorage.removeItem("jwt")
