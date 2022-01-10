@@ -18,6 +18,7 @@ public class TestDataRunner implements CommandLineRunner {
     private ReservationRepository reservationRepository;
     private RoomTypeRepository roomTypeRepository;
     private TerminRepository terminRepository;
+    private ReviewRepository reviewRepository;
     private RoomRepository roomRepository;
     private AccommodationRepository accommodationRepository;
 
@@ -25,7 +26,7 @@ public class TestDataRunner implements CommandLineRunner {
 
     public TestDataRunner(HotelRepository hotelRepository, ReservationRepository reservationRepository,
                           RoomTypeRepository roomTypeRepository, TerminRepository terminRepository, RoomRepository roomRepository,
-                          AccommodationRepository accommodationRepository) {
+                          AccommodationRepository accommodationRepository, ReviewRepository reviewRepository) {
 
         this.hotelRepository = hotelRepository;
         this.reservationRepository = reservationRepository;
@@ -33,6 +34,7 @@ public class TestDataRunner implements CommandLineRunner {
         this.terminRepository = terminRepository;
         this.roomRepository = roomRepository;
         this.accommodationRepository = accommodationRepository;
+        this.reviewRepository = reviewRepository;
 
     }
 
@@ -47,6 +49,14 @@ public class TestDataRunner implements CommandLineRunner {
         hotel1.setId(1L);
 
         hotelRepository.save(hotel1);
+
+        Hotel hotel2 = new Hotel();
+        hotel2.setName("Hotel Novi Sad");
+        hotel2.setDesc("Hotel u Novom Sadu");
+        hotel2.setNumberOfRooms(80);
+        hotel2.setId(2L);
+
+        hotelRepository.save(hotel2);
 
         //Dodavanje roomtype-a
         RoomType roomType = new RoomType();
@@ -150,9 +160,9 @@ public class TestDataRunner implements CommandLineRunner {
 
         Termin termin2 = new Termin();
         termin2.setId(2L);
-        termin2.setHotel(hotel1);
+        termin2.setHotel(hotel2);
         termin2.setDay(new Date());
-        termin2.setCity("Beograd");
+        termin2.setCity("Novi Sad");
 
 
         termin2.setAccommodation(accommodation2);
@@ -171,6 +181,34 @@ public class TestDataRunner implements CommandLineRunner {
         terminRepository.save(termin1);
         terminRepository.save(termin2);
         terminRepository.save(termin3);
+
+        //Dodavanje review-a
+        Review review = new Review();
+        review.setId(1L);
+        review.setGrade(3);
+        review.setCity("Beograd");
+        review.setComment("Odlican hotel, puna preporuka.");
+        review.setHotel(hotel1);
+
+        Review review2 = new Review();
+        review2.setId(2L);
+        review2.setGrade(4);
+        review2.setCity("Novi Sad");
+        review2.setComment("Nije lose");
+        review2.setHotel(hotel2);
+
+        Review review3 = new Review();
+        review3.setId(3L);
+        review3.setGrade(1);
+        review3.setCity("Novi Sad");
+        review3.setComment("Solidno lose");
+        review3.setHotel(hotel2);
+
+        reviewRepository.save(review);
+        reviewRepository.save(review2);
+        reviewRepository.save(review3);
+
+
 
 
     }

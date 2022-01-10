@@ -100,4 +100,71 @@
       </tr>
     </tbody>
   </table>
+
+  <h3>Reviews</h3>
+    <form>
+        <div class='row my-2'>
+            <div class="col-2">
+                <div class="form-group ">
+                    <input type="text" class="form-control" id="origin" [(ngModel)]="reviewFilter.city" (ngModelChange)="onChangeCity()" name="city"  placeholder="Filter by city">
+                </div>
+            </div>
+            
+            <div class="col-2">
+                <div class="form-group">
+                    <!-- <label for="destination">Email address</label> -->
+                    <input type="text" class="form-control" id="destination" [(ngModel)]="reviewFilter.hotel" (ngModelChange)="onChangeHotel()" name="hotel"  placeholder="Filter by Hotel">
+                </div>
+            </div>
+        </div>
+    </form>
+  <table class="table table-hover mt-3">
+    <thead>
+      <tr>
+        <th scope="col">City</th>
+        <th scope="col">Hotel</th>
+        <th scope="col">Grade</th>
+        <th scope="col">Comment</th>
+        <th scope="col">Actions</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let review of reviews">
+        <td>{{review.city}}</td>
+        <td>{{review.hotel.name}}</td>
+        <td>{{review.grade}}</td>
+        <td>{{review.comment}}</td>
+        <td><button (click)='onClickDelete(review)' type="button" class="btn btn-primary">Update</button></td>
+        <td><button (click)='onClickDelete(review)' type="button" class="btn btn-primary">Delete</button></td>
+       
+        
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Best Hotels</h3>
+  <table class="table table-hover mt-3">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Number of rooms</th>
+        <th scope="col">Description</th>
+        
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let hotel of hotels">
+        <td>{{hotel.name}}</td>
+        <td>{{hotel.numberOfRooms}}</td>
+        <td>{{hotel.desc}}</td>
+        
+       
+        
+      </tr>
+    </tbody>
+  </table>
+
+  
 </div>

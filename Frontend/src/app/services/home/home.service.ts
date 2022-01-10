@@ -73,4 +73,33 @@ export class HomeService {
 
     return this.http.post(this.reservationUrl+"/cancel",reservation,{headers:headers});
   }
+
+  loadReviews(reviewFilter){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    return this.http.post(this.reservationUrl+"/review/filter",reviewFilter,{headers:headers});
+  }
+
+  loadHotels(){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    return this.http.get(this.reservationUrl+"/hotel/review",{headers:headers});
+  }
+
+  deleteReview(review){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer "+localStorage.getItem('jwt')
+      }),
+      body: review,
+    };
+
+    return this.http.delete(this.reservationUrl+"/review",options);
+  }
 }
