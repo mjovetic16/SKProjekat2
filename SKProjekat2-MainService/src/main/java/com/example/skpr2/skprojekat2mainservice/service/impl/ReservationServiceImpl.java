@@ -92,6 +92,13 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public Page<ReservationDto> findAllById(Pageable pageable, String id) {
+        return reservationRepository.findAllByUserID(Long.valueOf(id), pageable)
+                .map(reservationMapper::reservationToReservationDto);
+
+    }
+
+    @Override
     public Page<TerminDto> findAllTs(Pageable pageable) {
 
         return terminRepository.findAll(pageable)
@@ -239,6 +246,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         ReservationDto reservationDtoEmpty = new ReservationDto();
         reservationDtoEmpty.setTerminDto(reservationMapper.terminToTerminDto(termin));
+        reservationDtoEmpty.setUserID(userDto2.getId());
 
         //Slanje konfirmacije na notification service
         ReservationUserDto rUserDto = reservationMapper.reservationUserDtoFromReservationDto(reservationDtoEmpty);

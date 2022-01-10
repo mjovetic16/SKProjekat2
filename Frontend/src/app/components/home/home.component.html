@@ -68,19 +68,33 @@
         <td>{{termin.accommodationDto.roomType.price}}</td>
         <td>{{termin.day | date:'medium'}}</td>
         <td><button (click)='onClickReserve(termin)' type="button" class="btn btn-primary">Reserve</button></td>
+       
         
-        <!-- <td *ngIf="usertype=='USER'"><div class="qty mt-0">
-            <span class="csu minus bg-primary" (click)="onClickMinus(ticket.id)">-</span>
-            <input type="number" [disabled]="true" class="cus count" name="qty" value= {{tableRows[ticket.id].value}}>
-            <span class="csu plus bg-primary" (click)="onClickPlus(ticket.id)">+</span>
-            <button type="button" class="btn btn-outline-primary btn-sm mx-1" (click)="onClickReserve(ticket.id)">Reserve</button>
-            
-        </div></td>
-        <td *ngIf="usertype=='ADMIN'"><div class="qty mt-0">
-            <button type="button" class="btn btn-outline-primary btn-sm mx-1" (click)="onClickEdit(ticket.id)">Edit</button>
-            <button type="button" class="btn btn-outline-primary btn-sm mx-1" (click)="onClickDelete(ticket.id)">Delete</button>
-            
-        </div></td> -->
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>My reservations</h3>
+  <table class="table table-hover mt-3">
+    <thead>
+      <tr>
+        <th scope="col">City</th>
+        <th scope="col">Hotel</th>
+        <th scope="col">Room type</th>
+        <th scope="col">Price</th>
+        <th scope="col">Day</th>
+        <th scope="col">Cancel</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let reservation of reservations">
+        <td>{{reservation.terminDto.city}}</td>
+        <td>{{reservation.terminDto.hotel.name}}</td>
+        <td>{{reservation.terminDto.accommodationDto.roomType.name}}</td>
+        <td>{{reservation.price}}</td>
+        <td>{{reservation.terminDto.day | date:'medium'}}</td>
+        <td><button (click)='onClickCancel(reservation)' type="button" class="btn btn-primary">Cancel</button></td>
        
         
       </tr>

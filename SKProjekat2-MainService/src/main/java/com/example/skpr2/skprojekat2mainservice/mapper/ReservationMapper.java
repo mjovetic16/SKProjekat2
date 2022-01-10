@@ -49,6 +49,7 @@ public class ReservationMapper {
         reservationDto.setTerminDto(terminToTerminDto(reservation.getTermin()));
         reservationDto.setPrice(reservation.getPrice());
         reservationDto.setNotified(reservation.isNotified());
+        reservationDto.setUserID(reservation.getUserID());
 
         return reservationDto;
     }

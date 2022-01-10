@@ -12,9 +12,12 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
 
   termini = [];
+  reservations = [];
   filter;
   username;
   tableRows;
+  tableRowsRes;
+
 
   constructor(private homeService: HomeService,private loginService: LoginService, private router: Router) { 
 
@@ -35,6 +38,7 @@ export class HomeComponent implements OnInit {
 
 
     this.loadTermini();
+    this.loadReservations();
 
   }
 
@@ -43,24 +47,34 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  // loadBookings():void{
-
-  //   let credentials = {username:this.username};
-  //   this.loginService.getUser(credentials).subscribe(data=>{
-  //     let bookings = data['bookings']
-
-  //     this.bookingCount = bookings.length;
-
-  //   },error => {
-  //     console.log(error);
+  loadReservations(){
+    this.homeService.loadReservations().subscribe(responseData=>{
       
-  //      this.showAlert=true;
-  //      this.alertContent = error.error.message; 
-      
+      let list = responseData['content'];
+
+      this.reservations = list;
+
     
-  //   });
 
-  // }
+      this.tableRowsRes = [];
+      for (let index = 0; index < list.length; index++) {
+        const element = list[index];
+
+        this.tableRowsRes[element.id] = element;
+        this.tableRowsRes[element.id].value = 1;
+        
+      }
+
+      console.log("My reservations:");
+      console.log(this.reservations);
+      
+      
+      
+    },error => {
+      console.log(error);
+    });
+
+  }
 
   loadTermini(){
     this.homeService.loadPage(this.filter).subscribe(responseData=>{
@@ -111,6 +125,8 @@ export class HomeComponent implements OnInit {
 
 
       this.loadTermini();
+
+      this.loadReservations();
       
     },error => {
       console.log(error);
@@ -118,6 +134,26 @@ export class HomeComponent implements OnInit {
     
     })
 
+  }
+
+  onClickCancel(reservation){
+    this.homeService.cancel(reservation).subscribe(data=>{
+
+      console.log("Reserve:");
+      
+      console.log(data);
+
+
+
+      this.loadTermini();
+
+      this.loadReservations();
+      
+    },error => {
+      console.log(error);
+      
+    
+    })
   }
 
 

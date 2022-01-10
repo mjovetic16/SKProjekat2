@@ -59,6 +59,15 @@ public class ReservationController {
         return new ResponseEntity<>(reservationService.findAll(pageable), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Get all reservations by user ID")
+    @GetMapping("/{id}")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
+    public ResponseEntity<Page<ReservationDto>> getAllReservationsUser(@RequestHeader("Authorization") String authorization,
+                                                                   Pageable pageable, @PathVariable String id) {
+
+        return new ResponseEntity<>(reservationService.findAllById(pageable, id), HttpStatus.OK);
+    }
+
 
 
     @ApiOperation(value = "Get all hotels")

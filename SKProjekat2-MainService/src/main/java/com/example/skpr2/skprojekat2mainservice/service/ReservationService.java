@@ -13,6 +13,8 @@ public interface ReservationService {
 
     Page<ReservationDto> findAll(Pageable pageable);
 
+    Page<ReservationDto> findAllById(Pageable pageable, String id);
+
     Page<TerminDto> findAllTs(Pageable pageable);
 
     Page<TerminDto> findAllFiltered(Pageable pageable, FilterDto filterDto) throws ParseException;

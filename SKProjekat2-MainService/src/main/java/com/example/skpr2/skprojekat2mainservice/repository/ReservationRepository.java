@@ -1,6 +1,8 @@
 package com.example.skpr2.skprojekat2mainservice.repository;
 
 import com.example.skpr2.skprojekat2mainservice.domain.Reservation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +15,7 @@ import java.util.Optional;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
     List<Reservation> findAllByNotifiedAndTerminDayGreaterThan(boolean notified, Date reservationTime);
+
+    Page<Reservation> findAllByUserID(Long id, Pageable pageable);
 
 }
