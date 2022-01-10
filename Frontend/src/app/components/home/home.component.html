@@ -1,1 +1,88 @@
-<p>home works!</p>
+<div class="container-fluid">
+
+    <h3>Termini</h3>
+
+
+    <form >
+        <div class='row my-2'>
+            <div class="col-2">
+                <div class="form-group ">
+                    <input type="text" class="form-control" id="origin" [(ngModel)]="filter.city" (ngModelChange)="onChangeCity()" name="city"  placeholder="Filter by city">
+                </div>
+            </div>
+            
+            <div class="col-2">
+                <div class="form-group">
+                    <!-- <label for="destination">Email address</label> -->
+                    <input type="text" class="form-control" id="destination" [(ngModel)]="filter.hotel" (ngModelChange)="onChangeHotel()" name="hotel"  placeholder="Filter by Hotel">
+                </div>
+            </div>
+
+            
+            <!-- <div class="form-group col-2">
+                <div class="input-group">
+                    <input class="form-control" placeholder="Filter By Depart Date"
+                           name="dp" [(ngModel)]="filterDate.departDate" (ngModelChange)="onChangeDepart()" ngbDatepicker #d="ngbDatepicker" aria-describedby="addon-cal">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id='addon-cal' (click)="d.toggle()"><i class=" bi bi-calendar-plus"></i></span>
+                    </div>
+                  
+                </div>
+            </div> 
+            <div class="form-group col-2">
+                <div class="input-group">
+                    <input class="form-control"  placeholder="Filter By Return Date"
+                           name="dp" [(ngModel)]="filterDate.returnDate" (ngModelChange)="onChangeReturn()" ngbDatepicker #c="ngbDatepicker" aria-describedby="addon-cal2">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id='addon-cal2' (click)="c.toggle()"><i class=" bi bi-calendar-plus"></i></span>
+                    </div>
+                  
+                </div>
+            </div>  -->
+
+            
+            
+        </div>
+        
+    </form>
+
+<table class="table table-hover mt-3">
+    <thead>
+      <tr>
+        <th scope="col">City</th>
+        <th scope="col">Hotel</th>
+        <th scope="col">Room type</th>
+        <th scope="col">Available</th>
+        <th scope="col">Price</th>
+        <th scope="col">Day</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let termin of termini">
+        <td>{{termin.city}}</td>
+        <td>{{termin.hotel.name}}</td>
+        <td>{{termin.accommodationDto.roomType.name}}</td>
+        <td>{{termin.accommodationDto.availableRooms}}</td>
+        <td>{{termin.accommodationDto.roomType.price}}</td>
+        <td>{{termin.day | date:'medium'}}</td>
+        <!-- <td><button (click)='' type="button" class="btn btn-link">{{ticket.company.name}}</button></td> -->
+        
+        <!-- <td *ngIf="usertype=='USER'"><div class="qty mt-0">
+            <span class="csu minus bg-primary" (click)="onClickMinus(ticket.id)">-</span>
+            <input type="number" [disabled]="true" class="cus count" name="qty" value= {{tableRows[ticket.id].value}}>
+            <span class="csu plus bg-primary" (click)="onClickPlus(ticket.id)">+</span>
+            <button type="button" class="btn btn-outline-primary btn-sm mx-1" (click)="onClickReserve(ticket.id)">Reserve</button>
+            
+        </div></td>
+        <td *ngIf="usertype=='ADMIN'"><div class="qty mt-0">
+            <button type="button" class="btn btn-outline-primary btn-sm mx-1" (click)="onClickEdit(ticket.id)">Edit</button>
+            <button type="button" class="btn btn-outline-primary btn-sm mx-1" (click)="onClickDelete(ticket.id)">Delete</button>
+            
+        </div></td> -->
+       
+        
+      </tr>
+    </tbody>
+  </table>
+</div>
