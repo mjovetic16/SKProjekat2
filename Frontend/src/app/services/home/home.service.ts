@@ -31,4 +31,13 @@ export class HomeService {
     return this.http.get(this.reservationUrl+"/termin",{headers:headers});
 
   }
+
+  reserve(termin){
+
+
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    return this.http.post(this.reservationUrl,termin,{headers:headers});
+  }
 }

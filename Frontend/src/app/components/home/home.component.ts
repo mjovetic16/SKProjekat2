@@ -100,6 +100,26 @@ export class HomeComponent implements OnInit {
     this.loadTermini();
   }
 
+  onClickReserve(termin){
+
+    this.homeService.reserve(termin).subscribe(data=>{
+
+      console.log("Reserve:");
+      
+      console.log(data);
+
+
+
+      this.loadTermini();
+      
+    },error => {
+      console.log(error);
+      
+    
+    })
+
+  }
+
 
 
 }
