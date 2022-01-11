@@ -102,4 +102,13 @@ export class HomeService {
 
     return this.http.delete(this.reservationUrl+"/review",options);
   }
+
+
+  createReview(review){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    return this.http.post(this.reservationUrl+"/review",review,{headers:headers});
+
+  }
 }

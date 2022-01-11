@@ -21,12 +21,14 @@ export class HomeComponent implements OnInit {
   tableRows;
   tableRowsRes;
   filterDate;
+  reviewCreate;
 
 
   constructor(private homeService: HomeService,private loginService: LoginService, private router: Router) { 
 
     this.filter = {city:"",hotel:"",startDate:"",endDate:""};
     this.filterDate={returnDate:"",departDate:""};
+    this.reviewCreate ={hotel:{id:0}, comment:"", grade:"", city:""};
     this.reviewFilter ={city:'',name:''};
 
 
@@ -100,6 +102,8 @@ export class HomeComponent implements OnInit {
         
       }
 
+      console.log("Termini:");
+      
       console.log(this.tableRows);
 
     },error => {
@@ -268,8 +272,22 @@ export class HomeComponent implements OnInit {
 
     this.loadTermini();
     
+  }
+
+  onClickCreate(){
+
+    this.homeService.createReview(this.reviewCreate).subscribe(responseData=>{
     
-  
+      console.log("Created review:");
+      console.log(responseData);
+
+      this.loadReviews(this.reviewFilter);
+      this.loadHotels();
+      
+
+    },error => {
+      console.log(error);
+    });
   }
 
 

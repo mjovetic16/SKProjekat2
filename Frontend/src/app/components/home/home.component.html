@@ -166,5 +166,45 @@
     </tbody>
   </table>
 
+  <h3>Create Review</h3>
+  <div class='row my-2'>
+    <div class="col-2">
+        <div class="form-group ">
+            <input type="text" class="form-control" id="hotel" [(ngModel)]="reviewCreate.hotel.id"  name="hotel"  placeholder="Hotel ID">
+        </div>
+    </div>
+    
+    <div class="col-2">
+        <div class="form-group">
+            <!-- <label for="destination">Email address</label> -->
+            <input type="text" class="form-control" id="city" [(ngModel)]="reviewCreate.city"  name="city"  placeholder="City">
+        </div>
+    </div>
+
+    <div class="col-2">
+      <div class="form-group">
+          <!-- <label for="destination">Email address</label> -->
+          <input type="text" class="form-control" id="grade" [(ngModel)]="reviewCreate.grade"  name="grade"  placeholder="Grade">
+      </div>
+  </div>
+
+  <div class="col-2">
+    <div class="form-group">
+        <!-- <label for="destination">Email address</label> -->
+        <input type="text" class="form-control" id="comment" [(ngModel)]="reviewCreate.comment"  name="comment"  placeholder="Comment">
+    </div>
+</div>
+
+<div class="col-2">
+  <button (click)='onClickCreate()' type="button" class="btn btn-primary">Create review</button>
+
+</div>
+
+
+
+
+
+  </div>
+
   
 </div>
