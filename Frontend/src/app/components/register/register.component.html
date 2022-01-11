@@ -1,0 +1,58 @@
+<h3>Create User</h3>
+<div class=''>
+    <div class="col-2">
+        <div class="form-group ">
+            <input type="text" class="form-control" id="hotel" [(ngModel)]="user.email"  name="hotel"  placeholder="Email">
+        </div>
+    </div>
+    
+    <div class="col-2">
+        <div class="form-group">
+            <!-- <label for="destination">Email address</label> -->
+            <input type="text" class="form-control" id="city" [(ngModel)]="user.username"  name="city"  placeholder="City">
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="form-group">
+            <!-- <label for="destination">Email address</label> -->
+            <input type="text" class="form-control" id="city" [(ngModel)]="user.password"  name="city"  placeholder="City">
+        </div>
+    </div>
+
+    <div class="col-2">
+      <div class="form-group">
+          <!-- <label for="destination">Email address</label> -->
+          <input type="text" class="form-control" id="grade" [(ngModel)]="user.firstName"  name="grade"  placeholder="Grade">
+      </div>
+  </div>
+
+  <div class="col-2">
+    <div class="form-group">
+        <!-- <label for="destination">Email address</label> -->
+        <input type="text" class="form-control" id="comment" [(ngModel)]="user.lastName"  name="comment"  placeholder="Comment">
+    </div>
+</div>
+<div class="col-2">
+    <div class="form-group">
+        <!-- <label for="destination">Email address</label> -->
+        <input type="text" class="form-control" id="comment" [(ngModel)]="user.type"  name="comment"  placeholder="Comment">
+    </div>
+</div>
+<div class="col-2">
+    <div class="form-group">
+        <!-- <label for="destination">Email address</label> -->
+        <input type="text" class="form-control" id="comment" [(ngModel)]="user.number"  name="comment"  placeholder="Comment">
+    </div>
+</div>
+<div class="col-2">
+    <div class="form-group">
+        <!-- <label for="destination">Email address</label> -->
+        <input type="text" class="form-control" id="comment" [(ngModel)]="user.birthdate"  name="comment"  placeholder="Comment">
+    </div>
+</div>
+<div class="col-2">
+    <button (click)='onSubmit()' type="button" class="btn btn-primary">Create user</button>
+  
+  </div>
+
+</div>

@@ -111,4 +111,10 @@ export class HomeService {
     return this.http.post(this.reservationUrl+"/review",review,{headers:headers});
 
   }
+
+  createUser(user){
+
+    return this.http.post(this.userUrl+"/client",user);
+
+  }
 }
