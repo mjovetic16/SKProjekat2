@@ -125,9 +125,9 @@ public class ReservationServiceImpl implements ReservationService {
             city = filterDto.getCity();
         if(filterDto.getHotel()!=null)
             hotel = filterDto.getHotel();
-        if(filterDto.getStartDate()!=null)
+        if(filterDto.getStartDate()!="")
             startDate = formatter.parse(filterDto.getStartDate());
-        if(filterDto.getEndDate()!=null)
+        if(filterDto.getEndDate()!="")
             endDate = formatter.parse(filterDto.getEndDate());
 
         pageable = PageRequest.of(0,100, Sort.by("accommodation.roomType.price").ascending());

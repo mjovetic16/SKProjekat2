@@ -117,7 +117,7 @@ public class TestDataRunner implements CommandLineRunner {
         Accommodation accommodation3 = new Accommodation();
         accommodation3.setId(3L);
         accommodation3.setRoomType(roomTypeB);
-        accommodation3.setAvailableRooms(0);
+        accommodation3.setAvailableRooms(1);
 
         Accommodation accommodation4 = new Accommodation();
         accommodation4.setId(4L);
@@ -172,7 +172,7 @@ public class TestDataRunner implements CommandLineRunner {
         termin3.setId(3L);
         termin3.setHotel(hotel1);
         termin3.setDay(new Date());
-        termin3.setCity("Novi Sad");
+        termin3.setCity("Beograd");
 
 
         termin3.setAccommodation(accommodation3);

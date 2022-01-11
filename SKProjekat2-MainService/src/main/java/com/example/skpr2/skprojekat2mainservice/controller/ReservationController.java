@@ -103,9 +103,9 @@ public class ReservationController {
     }
 
     @ApiOperation(value = "Get all filtered")
-    @GetMapping("/termin/filter")
+    @PostMapping("/termin/filter")
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER","ROLE_CLIENT"})
-    public ResponseEntity<Page<TerminDto>> getAllFiltered(@RequestHeader("Authorization") String authorization, Pageable pageable, FilterDto filterDto) throws ParseException {
+    public ResponseEntity<Page<TerminDto>> getAllFiltered(@RequestHeader("Authorization") String authorization, Pageable pageable, @RequestBody FilterDto filterDto) throws ParseException {
 
         return new ResponseEntity<>(reservationService.findAllFiltered(pageable, filterDto), HttpStatus.OK);
     }

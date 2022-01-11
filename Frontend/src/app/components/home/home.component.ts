@@ -20,11 +20,13 @@ export class HomeComponent implements OnInit {
   username;
   tableRows;
   tableRowsRes;
+  filterDate;
 
 
   constructor(private homeService: HomeService,private loginService: LoginService, private router: Router) { 
 
-    this.filter = {city:"",hotel:"",returnDate:"",departDate:"",all:true,oneWay:true};
+    this.filter = {city:"",hotel:"",startDate:"",endDate:""};
+    this.filterDate={returnDate:"",departDate:""};
     this.reviewFilter ={city:'',name:''};
 
 
@@ -175,12 +177,6 @@ export class HomeComponent implements OnInit {
   onClickCancel(reservation){
     this.homeService.cancel(reservation).subscribe(data=>{
 
-      console.log("Reserve:");
-      
-      console.log(data);
-
-
-
       this.loadTermini();
 
       this.loadReservations();
@@ -214,6 +210,66 @@ export class HomeComponent implements OnInit {
       
     
     })
+  }
+
+  onChangeBegin(){
+    
+    
+    
+    let date = new Date();
+
+    date.setFullYear(this.filterDate.departDate.year, this.filterDate.departDate.month-1, this.filterDate.departDate.day);
+
+    if(this.filterDate.departDate.month<10){
+      this.filterDate.departDate.month = "0"+this.filterDate.departDate.month;
+    }
+
+    if(this.filterDate.departDate.day<10){
+      this.filterDate.departDate.day = "0"+this.filterDate.departDate.day;
+    }
+
+
+    this.filter.startDate = this.filterDate.departDate.year+"-"+(this.filterDate.departDate.month)+"-"+this.filterDate.departDate.day;
+
+
+    console.log(this.filterDate);
+    
+    console.log(this.filter);
+
+    this.loadTermini();
+    
+
+
+    
+  }
+
+  onChangeEnd(){
+    
+    
+    
+    let date = new Date();
+
+    date.setFullYear(this.filterDate.returnDate.year, this.filterDate.returnDate.month-1, this.filterDate.returnDate.day);
+
+
+    if(this.filterDate.returnDate.month<10){
+      this.filterDate.returnDate.month = "0"+this.filterDate.returnDate.month;
+    }
+
+    if(this.filterDate.returnDate.day<10){
+      this.filterDate.returnDate.day = "0"+this.filterDate.returnDate.day;
+    }
+
+
+    this.filter.endDate = this.filterDate.returnDate.year+"-"+(this.filterDate.returnDate.month)+"-"+this.filterDate.returnDate.day;
+
+    console.log(this.filter);
+
+
+    this.loadTermini();
+    
+    
+  
   }
 
 

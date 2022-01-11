@@ -42,7 +42,7 @@ export class HomeService {
 
   
 
-    return this.http.get(this.reservationUrl+"/termin",{headers:headers});
+    return this.http.post(this.reservationUrl+"/termin/filter",filter,{headers:headers});
 
   }
 

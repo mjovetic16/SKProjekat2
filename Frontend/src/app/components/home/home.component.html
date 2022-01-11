@@ -19,10 +19,10 @@
             </div>
 
             
-            <!-- <div class="form-group col-2">
+            <div class="form-group col-2">
                 <div class="input-group">
-                    <input class="form-control" placeholder="Filter By Depart Date"
-                           name="dp" [(ngModel)]="filterDate.departDate" (ngModelChange)="onChangeDepart()" ngbDatepicker #d="ngbDatepicker" aria-describedby="addon-cal">
+                    <input class="form-control" placeholder="Date range: Start"
+                           name="dp" [(ngModel)]="filterDate.departDate" (ngModelChange)="onChangeBegin()" ngbDatepicker #d="ngbDatepicker" aria-describedby="addon-cal">
                     <div class="input-group-append">
                         <span class="input-group-text" id='addon-cal' (click)="d.toggle()"><i class=" bi bi-calendar-plus"></i></span>
                     </div>
@@ -31,14 +31,14 @@
             </div> 
             <div class="form-group col-2">
                 <div class="input-group">
-                    <input class="form-control"  placeholder="Filter By Return Date"
-                           name="dp" [(ngModel)]="filterDate.returnDate" (ngModelChange)="onChangeReturn()" ngbDatepicker #c="ngbDatepicker" aria-describedby="addon-cal2">
+                    <input class="form-control"  placeholder="Date range: End"
+                           name="dp" [(ngModel)]="filterDate.returnDate" (ngModelChange)="onChangeEnd()" ngbDatepicker #c="ngbDatepicker" aria-describedby="addon-cal2">
                     <div class="input-group-append">
                         <span class="input-group-text" id='addon-cal2' (click)="c.toggle()"><i class=" bi bi-calendar-plus"></i></span>
                     </div>
                   
                 </div>
-            </div>  -->
+            </div> 
 
             
             
