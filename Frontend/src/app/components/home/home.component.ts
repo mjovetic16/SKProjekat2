@@ -290,6 +290,10 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  onClickAdmin(){
+    this.router.navigate(['/admin']);
+  }
+
 
 
 }

@@ -162,10 +162,20 @@ public class UserServiceImpl implements UserService {
 
         Blocked blocked = blockedRepository.findById(1).get();
 
+        System.out.println("USpoelo");
+
         List<User> blockedUsers;
+        List<User> blockedUsers2 = new ArrayList<>();
         blockedUsers = blocked.getBlockedUsers();
+        for(User user: blockedUsers){
+            if(user.getId()!=userDto.getId()){
+                blockedUsers2.add(user);
+            }
+        }
         blockedUsers.remove(userMapper.userDtoToUser(userDto));
-        blocked.setBlockedUsers(blockedUsers);
+        blocked.setBlockedUsers(blockedUsers2);
+
+        System.out.println(blockedUsers);
 
         return userMapper.blockedToBlockedDto(blockedRepository.save(blocked));
 

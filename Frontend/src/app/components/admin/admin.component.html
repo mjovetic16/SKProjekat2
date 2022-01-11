@@ -1,0 +1,54 @@
+<div class="container-fluid">
+
+
+    <h3>All Users</h3>
+  <table class="table table-hover mt-3">
+    <thead>
+      <tr>
+        <th scope="col">Email</th>
+        <th scope="col">Username</th>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">Actions</th>
+        
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of allUsers">
+        <td>{{user.email}}</td>
+        <td>{{user.username}}</td>
+        <td>{{user.firstName}}</td>
+        <td>{{user.lastName}}</td>
+        <td><button (click)='onClickBlock(user)' type="button" class="btn btn-primary">Block</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+    <h3>Blocklist</h3>
+  <table class="table table-hover mt-3">
+    <thead>
+      <tr>
+        <th scope="col">Email</th>
+        <th scope="col">Username</th>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">Actions</th>
+        
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of blocklist">
+        <td>{{user.email}}</td>
+        <td>{{user.username}}</td>
+        <td>{{user.firstName}}</td>
+        <td>{{user.lastName}}</td>
+        <td><button (click)='onClickUnBlock(user)' type="button" class="btn btn-primary">UnBlock</button></td>
+
+    
+      </tr>
+    </tbody>
+  </table>
+
+</div>
