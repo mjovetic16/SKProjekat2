@@ -17,6 +17,7 @@ export class AdminComponent implements OnInit {
   user;
   ranks;
   newrank;
+  hotels;
   
 
   constructor(private router: Router, private homeService: HomeService, private adminService: AdminService) { }
@@ -26,6 +27,7 @@ export class AdminComponent implements OnInit {
     this.loadBlocklist();
     this.loadUsers();
     this.loadRanks();
+    this.loadHotels();
 
     this.newrank={name:null,value:null,discount:null}
   }
@@ -49,6 +51,8 @@ export class AdminComponent implements OnInit {
     this.adminService.loadUsers().subscribe(users => {
 
       this.allUsers = users["content"];
+      console.log("Users:");
+      
       console.log(users);
       
 
@@ -103,6 +107,8 @@ export class AdminComponent implements OnInit {
   loadRanks(){
     this.adminService.loadRanks().subscribe(data => {
 
+      console.log("ranks:");
+      
       console.log(data);
       this.ranks = data['content'];
 
@@ -128,5 +134,29 @@ export class AdminComponent implements OnInit {
     this.newrank = {name:null,value:null,discount:null};
   }
 
+  loadHotels(){
+    this.adminService.loadHotels().subscribe(data => {
+
+      console.log("hotels:");
+      
+      console.log(data);
+      this.hotels = data['content'];
+
+    },error => {
+      console.log(error);
+    });
+  }
+
+  onClickUpdateHotel(hotel){
+    this.adminService.updateHotel(hotel).subscribe(data => {
+      console.log("Hotel updated");
+      console.log(data);
+      
+      this.loadHotels();
+
+    },error => {
+      console.log(error);
+    });
+  }
   
 }

@@ -17,10 +17,10 @@ public class Hotel {
 
     private int numberOfRooms;
 
-    @OneToMany
+    @ManyToMany
     private List<Room> rooms;
 
-    @OneToMany
+    @ManyToMany
     private List<RoomType> roomTypes;
 
 

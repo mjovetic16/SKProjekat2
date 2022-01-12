@@ -103,6 +103,11 @@ public class TestDataRunner implements CommandLineRunner {
         hotel1.setRoomTypes(roomTypes);
         hotelRepository.save(hotel1);
 
+        roomTypes.remove(roomType);
+        hotel2.setRooms(rooms);
+        hotel2.setRoomTypes(roomTypes);
+        hotelRepository.save(hotel2);
+
         //Dodavanje smestaja
         Accommodation accommodation1 = new Accommodation();
         accommodation1.setId(1L);

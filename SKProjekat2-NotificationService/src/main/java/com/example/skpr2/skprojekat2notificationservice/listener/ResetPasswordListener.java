@@ -30,6 +30,6 @@ public class ResetPasswordListener {
 
         Notification notification = notificationService.getResetNotification(userDto);
 
-        emailService.sendSimpleMessage("mjovetic16@raf.rs", "Confirm Registration", notification.getText());
+        emailService.sendSimpleMessage("mjovetic16@raf.rs", "Password Reset", notification.getText());
     }
 }

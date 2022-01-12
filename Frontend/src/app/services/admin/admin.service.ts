@@ -65,5 +65,26 @@ export class AdminService {
     return this.http.post(this.userUrl+"/rank",rank,{headers:headers});
   }
 
+  loadHotels(){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    return this.http.get(this.reservationUrl+"/hotel",{headers:headers});
+  }
+
+  updateHotel(hotel){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    return this.http.post(this.reservationUrl+"/hotel/update",hotel,{headers:headers});
+  }
+
+  updateHotelAlloc(allocation){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    return this.http.post(this.reservationUrl+"/hotel/allocation",allocation,{headers:headers});
+  }
+
 
 }

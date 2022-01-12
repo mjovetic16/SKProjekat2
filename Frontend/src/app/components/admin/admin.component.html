@@ -150,3 +150,35 @@
     </tr>
   </tbody>
 </table>
+
+<h3>Hotels</h3>
+  <table class="table table-hover mt-3">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Number of rooms</th>
+        <th scope="col">Room Types and price</th>
+        <th scope="col">Actions</th>
+        
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let hotel of hotels">
+        <td><input type="text" class="form-control" id="comment" [(ngModel)]="hotel.name"  name="comment"  placeholder="2021-01-01"></td>
+        <td><input type="text" class="form-control" id="comment" [(ngModel)]="hotel.desc"  name="comment"  placeholder="2021-01-01"></td>
+        <td><input type="text" class="form-control" id="comment" [(ngModel)]="hotel.numberOfRooms"  name="comment"  placeholder="2021-01-01"></td>
+        <td>
+          <div class="row" *ngFor="let type of hotel.roomTypes" >
+            <input type="text" class="col-2" id="comment" [(ngModel)]="type.name"  name="comment"  placeholder="2021-01-01">
+            <input type="text" class="col-2" id="comment" [(ngModel)]="type.price"  name="comment"  placeholder="2021-01-01">
+          </div>
+        </td>
+
+        <td><button (click)='onClickUpdateHotel(hotel)' type="button" class="btn btn-primary">Update</button></td>
+
+    
+      </tr>
+    </tbody>
+  </table>
