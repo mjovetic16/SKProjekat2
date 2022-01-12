@@ -44,5 +44,26 @@ export class AdminService {
     return this.http.post(this.userUrl+"/block/unblock",user,{headers:headers});
   }
 
+  update(user){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    return this.http.post(this.userUrl+"/update",user,{headers:headers});
+  }
+
+  loadRanks(){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    return this.http.get(this.userUrl+"/rank/all",{headers:headers});
+  }
+
+  updateRank(rank){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    return this.http.post(this.userUrl+"/rank",rank,{headers:headers});
+  }
+
 
 }

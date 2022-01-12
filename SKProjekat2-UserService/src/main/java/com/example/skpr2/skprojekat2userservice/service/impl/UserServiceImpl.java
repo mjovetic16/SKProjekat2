@@ -60,6 +60,12 @@ public class UserServiceImpl implements UserService {
                 .map(userMapper::userToUserDto);
     }
 
+    @Override
+    public Page<RankDto> getRanks(Pageable pageable) {
+        return rankRepository.findAll(pageable)
+                .map(userMapper::rankToRankDto);
+    }
+
 
     @Override
     public UserDto add(UserCreateDto userCreateDto) {
@@ -234,7 +240,7 @@ public class UserServiceImpl implements UserService {
     public UserDto resetPassword(UserDto userDto, String authorization) {
 
 
-        User newUser = userRepository.findUserById(userDto.getId()).orElseThrow(()->new NotFoundException("User ne postoji"));
+        User newUser = userRepository.findUserByEmail(userDto.getEmail()).orElseThrow(()->new NotFoundException("User ne postoji"));
 
         newUser.setPassword("kDbjsdg12534");
         userRepository.save(newUser);

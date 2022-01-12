@@ -39,4 +39,12 @@ export class LoginService implements OnDestroy {
     localStorage.removeItem("jwt")
     localStorage.removeItem("user")
   }
+
+  resetPassword(user){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', localStorage.getItem('jwt')); 
+
+    return this.http.post(this.userUrl+"/user/reset",user,{headers:headers});
+  }
+ 
 }

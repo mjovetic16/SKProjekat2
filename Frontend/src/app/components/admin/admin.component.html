@@ -51,4 +51,102 @@
     </tbody>
   </table>
 
+  <h3>My account</h3>
+  <div class=''>
+    <div class="col-2">
+        <div class="form-group ">
+          <label for="destination">Email address</label> 
+            <input type="text" class="form-control" id="hotel" [(ngModel)]="user.email"  name="hotel"  placeholder="Email">
+        </div>
+    </div>
+    
+    <div class="col-2">
+        <div class="form-group">
+            <!-- <label for="destination">Email address</label> -->
+            <label for="destination">Username</label> 
+            <input type="text" class="form-control" id="city" [(ngModel)]="user.username"  name="city"  placeholder="Username">
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="form-group">
+            <!-- <label for="destination">Email address</label> -->
+            <label for="destination">Password</label> 
+            <input type="text" class="form-control" id="city" [(ngModel)]="user.password"  name="city"  placeholder="Password">
+        </div>
+    </div>
+
+    <div class="col-2">
+      <div class="form-group">
+          <!-- <label for="destination">Email address</label> -->
+          <label for="destination">First name</label> 
+          <input type="text" class="form-control" id="grade" [(ngModel)]="user.firstName"  name="grade"  placeholder="First name">
+      </div>
+  </div>
+
+  <div class="col-2">
+    <div class="form-group">
+        <!-- <label for="destination">Email address</label> -->
+        <label for="destination">Last name</label> 
+        <input type="text" class="form-control" id="comment" [(ngModel)]="user.lastName"  name="comment"  placeholder="Last name">
+    </div>
 </div>
+<!-- <div class="col-2"> -->
+    <!-- <div class="form-group"> -->
+        <!-- <label for="destination">Email address</label> -->
+        <!-- <label for="destination">User type</label>  -->
+        <!-- <input type="text" class="form-control" id="comment" [(ngModel)]="user.type"  name="comment"  placeholder="Comment"> -->
+    <!-- </div> -->
+<!-- </div> -->
+<div class="col-2">
+    <div class="form-group">
+        <!-- <label for="destination">Email address</label> -->
+        <label for="destination">Phone number</label> 
+        <input type="text" class="form-control" id="comment" [(ngModel)]="user.phoneNumber"  name="comment"  placeholder="123456789">
+    </div>
+</div>
+<div class="col-2">
+    <div class="form-group">
+        <!-- <label for="destination">Email address</label> -->
+        <label for="destination">Birth Date</label> 
+        <input type="text" class="form-control" id="comment" [(ngModel)]="user.birthdate"  name="comment"  placeholder="2021-01-01">
+    </div>
+</div>
+<div class="col-2">
+    <button (click)='onUpdate()' type="button" class="btn btn-primary">Update</button>
+  
+  </div>
+
+</div>
+
+
+</div>
+<h3>Ranks</h3>
+<table class="table table-hover mt-3">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Value</th>
+      <th scope="col">Discount</th>
+      <th scope="col">Actions</th>
+      
+      
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let rank of ranks">
+      <td><input type="text" class="form-control" id="comment" [(ngModel)]="rank.name"  name="comment"  placeholder="2021-01-01"></td>
+      <td><input type="text" class="form-control" id="comment" [(ngModel)]="rank.value"  name="comment"  placeholder="2021-01-01"></td>
+      <td><input type="text" class="form-control" id="comment" [(ngModel)]="rank.discount"  name="comment"  placeholder="2021-01-01"></td>
+      <td><button (click)='onClickUpdateRank(rank)' type="button" class="btn btn-primary">Update</button></td>
+
+  
+    </tr>
+    <tr>
+      <td><input type="text" class="form-control" id="comment" [(ngModel)]="newrank.name"  name="comment"  placeholder="Name"></td>
+      <td><input type="text" class="form-control" id="comment" [(ngModel)]="newrank.value"  name="comment"  placeholder="Value"></td>
+      <td><input type="text" class="form-control" id="comment" [(ngModel)]="newrank.discount"  name="comment"  placeholder="Discount"></td>
+      <td><button (click)='onClickAddRank()' type="button" class="btn btn-primary">Add Rank</button></td>
+
+    </tr>
+  </tbody>
+</table>

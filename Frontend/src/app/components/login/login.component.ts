@@ -80,4 +80,17 @@ export class LoginComponent implements OnInit {
   onClickRegister(){
     this.router.navigate(['/register'])
   }
+
+  onResetPassword(){
+    let email = this.loginForm.get('email').value;
+    let user = {email:email}
+
+    console.log(email);
+    
+    this.loginService.resetPassword(user).subscribe(resp => {
+      console.log("Password reset");
+      console.log(resp);
+      
+    })
+  }
 }

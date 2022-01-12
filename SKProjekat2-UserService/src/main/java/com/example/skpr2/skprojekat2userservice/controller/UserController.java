@@ -56,7 +56,7 @@ public class UserController {
 
     @ApiOperation(value="Edit profile data")
     @PostMapping("/update")
-    @CheckSecurity(roles = {"ROLE_CLIENT","ROLE_MANAGER"})
+    @CheckSecurity(roles = {"ROLE_CLIENT","ROLE_MANAGER","ROLE_ADMIN"})
     public ResponseEntity<UserDto> updateUser(@RequestHeader("Authorization") String authorization, @RequestBody UserDto userDto){
         return new ResponseEntity<>(userService.updateUser(userDto,authorization),HttpStatus.OK);
     }
@@ -87,6 +87,13 @@ public class UserController {
     @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
     public ResponseEntity<RankDto> changeRank(@RequestHeader("Authorization") String authorization, @RequestBody RankDto rankDto){
         return new ResponseEntity<>(userService.changeRank(rankDto),HttpStatus.OK);
+    }
+
+    @ApiOperation(value="Get all ranks")
+    @GetMapping("/rank/all")
+    @CheckSecurity(roles = {"ROLE_ADMIN","ROLE_MANAGER"})
+    public ResponseEntity<Page<RankDto>> getRanks(@RequestHeader("Authorization") String authorization,Pageable pageable){
+        return new ResponseEntity<>(userService.getRanks(pageable),HttpStatus.OK);
     }
 
     @ApiOperation(value="Get user by ID")

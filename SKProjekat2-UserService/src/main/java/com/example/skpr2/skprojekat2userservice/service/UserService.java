@@ -11,6 +11,8 @@ public interface UserService {
 
     Page<UserDto> findAll(Pageable pageable);
 
+    Page<RankDto> getRanks(Pageable pageable);
+
     UserDto add(UserCreateDto userCreateDto);
 
     UserDto addManager(ManagerCreateDto managerCreateDto);
