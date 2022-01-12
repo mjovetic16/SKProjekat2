@@ -13,6 +13,7 @@ export class AdminService {
 
 
   private readonly userUrl = "http://localhost:8083/users/user";
+  private readonly notificationUrl = "http://localhost:8083/notification/notification";
   private readonly reservationUrl = "http://localhost:8083/main/reservation";
 
   loadBlocklist(){
@@ -84,6 +85,20 @@ export class AdminService {
     headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
 
     return this.http.post(this.reservationUrl+"/hotel/allocation",allocation,{headers:headers});
+  }
+
+  loadNotifications(filter){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    return this.http.post(this.notificationUrl,filter,{headers:headers});
+  }
+
+  loadNotificationTypes(){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    return this.http.get(this.notificationUrl+"/types",{headers:headers});
   }
 
 

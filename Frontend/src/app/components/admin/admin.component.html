@@ -182,3 +182,103 @@
       </tr>
     </tbody>
   </table>
+
+  <h3>Notifications</h3>
+  <form >
+    <div class='row my-2'>
+        <div class="col-2">
+            <div class="form-group ">
+                <input type="text" class="form-control" id="origin" [(ngModel)]="notFilter.email" (ngModelChange)="onChangeFilter()" name="city"  placeholder="Filter by email">
+            </div>
+        </div>
+        
+        <div class="col-2">
+            <div class="form-group">
+                <!-- <label for="destination">Email address</label> -->
+                <input type="text" class="form-control" id="destination" [(ngModel)]="notFilter.name" (ngModelChange)="onChangeFilter()" name="hotel"  placeholder="Filter by Notification type">
+            </div>
+        </div>
+
+        
+        <div class="form-group col-2">
+            <div class="input-group">
+                <input class="form-control" placeholder="Date range: Start"
+                       name="dp" [(ngModel)]="filterDate.departDate" (ngModelChange)="onChangeBegin()" ngbDatepicker #d="ngbDatepicker" aria-describedby="addon-cal">
+                <div class="input-group-append">
+                    <span class="input-group-text" id='addon-cal' (click)="d.toggle()"><i class=" bi bi-calendar-plus"></i></span>
+                </div>
+              
+            </div>
+        </div> 
+        <div class="form-group col-2">
+            <div class="input-group">
+                <input class="form-control"  placeholder="Date range: End"
+                       name="dp" [(ngModel)]="filterDate.returnDate" (ngModelChange)="onChangeEnd()" ngbDatepicker #c="ngbDatepicker" aria-describedby="addon-cal2">
+                <div class="input-group-append">
+                    <span class="input-group-text" id='addon-cal2' (click)="c.toggle()"><i class=" bi bi-calendar-plus"></i></span>
+                </div>
+              
+            </div>
+        </div> 
+
+        
+        
+    </div>
+    
+</form>
+  <table class="table table-hover mt-3">
+    <thead>
+      <tr>
+        <th scope="col">User ID</th>
+        <th scope="col">Email</th>
+        <th scope="col">Date</th>
+        <th scope="col">Notification type</th>
+        <th scope="col">Notification template</th>
+        <th scope="col">Text</th>
+        
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let notification of notifications">
+        <td>{{notification.userID}}</td>
+        <td>{{notification.email}}</td>
+        <td>{{notification.date | date:'medium'}}</td>
+        <td>{{notification.notificationType.name}}</td>
+        <td>{{notification.notificationType.template}}</td>
+        <td>{{notification.text}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Notification types</h3>
+  <table class="table table-hover mt-3">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Template</th>
+        <th scope="col">Parameters</th>
+        <th scope="col">Update</th>
+        
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let type of notTypes">
+        <td >
+          <input type="text" id="comment" [(ngModel)]="type.name"  name="comment"  placeholder="Name">
+        </td>
+        <td>
+          {{type.template}}
+          <input type="text" id="comment" [(ngModel)]="type.template"  name="comment"  placeholder="Template">
+        </td>
+        <td class="row">
+          <div class="col-2" *ngFor="let param of type.parameters" >
+            <input type="text" id="comment" [(ngModel)]="param.name"  name="comment"  placeholder="Param">
+          </div>
+        </td>
+
+        <td><button (click)='onClickUpdateType(type)' type="button" class="btn btn-primary">Update</button></td>
+      </tr>
+    </tbody>
+  </table>

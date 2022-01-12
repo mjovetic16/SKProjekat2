@@ -18,9 +18,17 @@ export class AdminComponent implements OnInit {
   ranks;
   newrank;
   hotels;
+  notifications;
+  notFilter;
+  notTypes;
+  filterDate;
   
 
-  constructor(private router: Router, private homeService: HomeService, private adminService: AdminService) { }
+  constructor(private router: Router, private homeService: HomeService, private adminService: AdminService) { 
+    this.notFilter = {email:'',name:'',endDate:null,startDate:null};
+    this.filterDate={returnDate:"",departDate:""};
+    
+  }
 
   ngOnInit(): void {
     this.user = this.homeService.loadUser();
@@ -28,6 +36,8 @@ export class AdminComponent implements OnInit {
     this.loadUsers();
     this.loadRanks();
     this.loadHotels();
+    this.loadNotifications(this.notFilter);
+    this.loadTypes();
 
     this.newrank={name:null,value:null,discount:null}
   }
@@ -158,5 +168,94 @@ export class AdminComponent implements OnInit {
       console.log(error);
     });
   }
+
+  loadNotifications(filter){
+    this.adminService.loadNotifications(filter).subscribe(data => {
+
+      console.log("notifications:");
+      
+      console.log(data);
+      this.notifications = data['content'];
+
+    },error => {
+      console.log(error);
+    });
+  }
+
+  loadTypes(){
+    this.adminService.loadNotificationTypes().subscribe(data => {
+
+      console.log("notification types:");
+      
+      console.log(data);
+      this.notTypes = data['content'];
+
+    },error => {
+      console.log(error);
+    });
+  }
+
+  onChangeFilter(){
+    this.loadNotifications(this.notFilter);
+  }
+  onChangeBegin(){
+    
+    
+    
+    let date = new Date();
+
+    date.setFullYear(this.filterDate.departDate.year, this.filterDate.departDate.month-1, this.filterDate.departDate.day);
+
+    if(this.filterDate.departDate.month<10){
+      this.filterDate.departDate.month = "0"+this.filterDate.departDate.month;
+    }
+
+    if(this.filterDate.departDate.day<10){
+      this.filterDate.departDate.day = "0"+this.filterDate.departDate.day;
+    }
+
+
+    this.notFilter.startDate = this.filterDate.departDate.year+"-"+(this.filterDate.departDate.month)+"-"+this.filterDate.departDate.day;
+
+
+    console.log(this.filterDate);
+    
+    console.log(this.notFilter);
+
+    this.loadNotifications(this.notFilter);
+    
+
+
+    
+  }
+
+  onChangeEnd(){
+    
+    
+    
+    let date = new Date();
+
+    date.setFullYear(this.filterDate.returnDate.year, this.filterDate.returnDate.month-1, this.filterDate.returnDate.day);
+
+
+    if(this.filterDate.returnDate.month<10){
+      this.filterDate.returnDate.month = "0"+this.filterDate.returnDate.month;
+    }
+
+    if(this.filterDate.returnDate.day<10){
+      this.filterDate.returnDate.day = "0"+this.filterDate.returnDate.day;
+    }
+
+
+    this.notFilter.endDate = this.filterDate.returnDate.year+"-"+(this.filterDate.returnDate.month)+"-"+this.filterDate.returnDate.day;
+
+    console.log(this.notFilter);
+
+
+    this.loadNotifications(this.notFilter);
+    
+  }
+
+ 
   
 }
