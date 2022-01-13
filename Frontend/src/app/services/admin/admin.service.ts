@@ -101,5 +101,28 @@ export class AdminService {
     return this.http.get(this.notificationUrl+"/types",{headers:headers});
   }
 
+  updateType(type){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    return this.http.post(this.notificationUrl+"/types",type,{headers:headers});
+  }
+
+  deleteType(type){
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', "Bearer "+localStorage.getItem('jwt'));
+
+    
+
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer "+localStorage.getItem('jwt')
+      }),
+      body: type,
+    };
+
+    return this.http.delete(this.notificationUrl+"/types",options);
+  }
 
 }

@@ -256,6 +256,34 @@ export class AdminComponent implements OnInit {
     
   }
 
+  onClickUpdateType(type){
+    this.adminService.updateType(type).subscribe(data => {
+
+      console.log("updated types:");
+      
+      console.log(data);
+
+      this.loadTypes();
+
+    },error => {
+      console.log(error);
+    });
+  }
+
+  onClickDeleteType(type){
+    this.adminService.deleteType(type).subscribe(data => {
+
+      console.log("deleted type:");
+      
+      console.log(data);
+
+      this.loadTypes();
+
+    },error => {
+      console.log(error);
+    });
+  }
+
  
   
 }
